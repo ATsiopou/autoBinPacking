@@ -1,0 +1,196 @@
+Monte Carlo simulation [K]
+----------------------------
+Request Size   : 5
+Topology Size  : 5
+Mean ppcc      : 14.02
+Mean naive     : 22.65
+% difference   : 47.03
+
+Request Size   : 5
+Topology Size  : 6
+Mean ppcc      : 12.20
+Mean naive     : 18.38
+% difference   : 40.44
+
+Request Size   : 5
+Topology Size  : 7
+Mean ppcc      : 10.31
+Mean naive     : 14.99
+% difference   : 37.00
+
+Request Size   : 5
+Topology Size  : 8
+Mean ppcc      : 9.27
+Mean naive     : 12.98
+% difference   : 33.37
+
+Request Size   : 5
+Topology Size  : 9
+Mean ppcc      : 7.67
+Mean naive     : 10.66
+% difference   : 32.54
+
+Request Size   : 5
+Topology Size  : 10
+Mean ppcc      : 6.81
+Mean naive     : 9.69
+% difference   : 34.96
+
+Request Size   : 5
+Topology Size  : 11
+Mean ppcc      : 7.08
+Mean naive     : 9.53
+% difference   : 29.46
+
+Request Size   : 5
+Topology Size  : 12
+Mean ppcc      : 6.54
+Mean naive     : 9.14
+% difference   : 33.09
+
+Request Size   : 5
+Topology Size  : 13
+Mean ppcc      : 6.25
+Mean naive     : 8.83
+% difference   : 34.17
+
+Request Size   : 5
+Topology Size  : 14
+Mean ppcc      : 5.92
+Mean naive     : 8.58
+% difference   : 36.72
+
+Request Size   : 5
+Topology Size  : 15
+Mean ppcc      : 5.99
+Mean naive     : 8.81
+% difference   : 38.15
+
+Request Size   : 5
+Topology Size  : 16
+Mean ppcc      : 5.83
+Mean naive     : 8.51
+% difference   : 37.35
+
+Request Size   : 5
+Topology Size  : 17
+Mean ppcc      : 5.85
+Mean naive     : 8.34
+% difference   : 35.09
+
+Request Size   : 5
+Topology Size  : 18
+Mean ppcc      : 5.92
+Mean naive     : 8.46
+% difference   : 35.29
+
+Request Size   : 5
+Topology Size  : 19
+Mean ppcc      : 6.16
+Mean naive     : 8.81
+% difference   : 35.42
+
+Request Size   : 5
+Topology Size  : 20
+Mean ppcc      : 5.86
+Mean naive     : 8.52
+% difference   : 36.98
+
+
+Monte Carlo simulation [R]
+----------------------------
+Request Size   : 5
+Topology Size  : 20
+Mean ppcc      : 6.45
+Mean naive     : 9.90
+% difference   : 42.19
+
+Request Size   : 6
+Topology Size  : 20
+Mean ppcc      : 7.77
+Mean naive     : 11.88
+% difference   : 41.87
+
+Request Size   : 7
+Topology Size  : 20
+Mean ppcc      : 9.06
+Mean naive     : 13.86
+% difference   : 41.94
+
+Request Size   : 8
+Topology Size  : 20
+Mean ppcc      : 10.43
+Mean naive     : 15.84
+% difference   : 41.15
+
+Request Size   : 9
+Topology Size  : 20
+Mean ppcc      : 11.80
+Mean naive     : 17.82
+% difference   : 40.61
+
+Request Size   : 10
+Topology Size  : 20
+Mean ppcc      : 13.01
+Mean naive     : 19.80
+% difference   : 41.38
+
+Request Size   : 11
+Topology Size  : 20
+Mean ppcc      : 14.22
+Mean naive     : 21.78
+% difference   : 42.01
+
+Request Size   : 12
+Topology Size  : 20
+Mean ppcc      : 15.64
+Mean naive     : 23.76
+% difference   : 41.20
+
+Request Size   : 13
+Topology Size  : 20
+Mean ppcc      : 16.93
+Mean naive     : 25.74
+% difference   : 41.29
+
+Request Size   : 14
+Topology Size  : 20
+Mean ppcc      : 18.53
+Mean naive     : 27.72
+% difference   : 39.75
+
+Request Size   : 15
+Topology Size  : 20
+Mean ppcc      : 20.35
+Mean naive     : 29.70
+% difference   : 37.34
+
+Request Size   : 16
+Topology Size  : 20
+Mean ppcc      : 22.45
+Mean naive     : 31.68
+% difference   : 34.09
+
+Request Size   : 17
+Topology Size  : 20
+Mean ppcc      : 24.54
+Mean naive     : 33.66
+% difference   : 31.33
+
+Request Size   : 18
+Topology Size  : 20
+Mean ppcc      : 26.23
+Mean naive     : 35.64
+% difference   : 30.42
+
+Request Size   : 19
+Topology Size  : 20
+Mean ppcc      : 28.40
+Mean naive     : 37.62
+% difference   : 27.93
+
+Request Size   : 20
+Topology Size  : 20
+Mean ppcc      : 30.13
+Mean naive     : 39.60
+% difference   : 27.17

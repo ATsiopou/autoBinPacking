@@ -1,0 +1,323 @@
+
+Monte Carlo simulation [K]
+----------------------------
+------------------------------
+-           K = 10           -
+------------------------------
+Request Size   : 5
+Topology Size  : 10
+Mean AGW       : 10.18
+Mean SPBA      : 8.22
+Mean ppcc      : 7.09
+------------------------------
+-           K = 11           -
+------------------------------
+Request Size   : 5
+Topology Size  : 11
+Mean AGW       : 9.60
+Mean SPBA      : 8.08
+Mean ppcc      : 7.06
+------------------------------
+-           K = 12           -
+------------------------------
+Request Size   : 5
+Topology Size  : 12
+Mean AGW       : 8.93
+Mean SPBA      : 7.39
+Mean ppcc      : 6.37
+------------------------------
+-           K = 13           -
+------------------------------
+Request Size   : 5
+Topology Size  : 13
+Mean AGW       : 8.72
+Mean SPBA      : 7.11
+Mean ppcc      : 6.06
+------------------------------
+-           K = 14           -
+------------------------------
+Request Size   : 5
+Topology Size  : 14
+Mean AGW       : 8.70
+Mean SPBA      : 6.91
+Mean ppcc      : 5.94
+------------------------------
+-           K = 15           -
+------------------------------
+Request Size   : 5
+Topology Size  : 15
+Mean AGW       : 8.67
+Mean SPBA      : 6.93
+Mean ppcc      : 5.98
+------------------------------
+-           K = 16           -
+------------------------------
+Request Size   : 5
+Topology Size  : 16
+Mean AGW       : 8.64
+Mean SPBA      : 6.91
+Mean ppcc      : 6.03
+------------------------------
+-           K = 17           -
+------------------------------
+Request Size   : 5
+Topology Size  : 17
+Mean AGW       : 8.79
+Mean SPBA      : 6.57
+Mean ppcc      : 5.89
+------------------------------
+-           K = 18           -
+------------------------------
+Request Size   : 5
+Topology Size  : 18
+Mean AGW       : 8.64
+Mean SPBA      : 6.54
+Mean ppcc      : 6.02
+------------------------------
+-           K = 19           -
+------------------------------
+Request Size   : 5
+Topology Size  : 19
+Mean AGW       : 8.53
+Mean SPBA      : 6.76
+Mean ppcc      : 6.02
+------------------------------
+-           K = 20           -
+------------------------------
+Request Size   : 5
+Topology Size  : 20
+Mean AGW       : 8.56
+Mean SPBA      : 6.65
+Mean ppcc      : 5.87
+---------------------------------
+---------------------------------
+-           Gains		-
+-	     [K]		-
+---------------------------------
+---------------------------------
+   PPCC v.s. AGW : 30.24 (%)
+   PPCC v.s. SPBA: 12.46 (%)
+   SPBA v.s. AGW : 20.31 (%)
+
+
+
+  Monte Carlo simulation [R]
+------------------------------
+
+------------------------------
+-           R = 10           -
+------------------------------
+Request Size   : 10
+Topology Size  : 20
+Mean AGW       : 19.00
+Mean SPBA      : 14.85
+Mean ppcc      : 13.62
+------------------------------
+-           R = 11           -
+------------------------------
+Request Size   : 11
+Topology Size  : 20
+Mean AGW       : 20.90
+Mean SPBA      : 16.48
+Mean ppcc      : 15.17
+------------------------------
+-           R = 12           -
+------------------------------
+Request Size   : 12
+Topology Size  : 20
+Mean AGW       : 22.80
+Mean SPBA      : 17.90
+Mean ppcc      : 16.45
+------------------------------
+-           R = 13           -
+------------------------------
+Request Size   : 13
+Topology Size  : 20
+Mean AGW       : 24.70
+Mean SPBA      : 19.45
+Mean ppcc      : 17.89
+------------------------------
+-           R = 14           -
+------------------------------
+Request Size   : 14
+Topology Size  : 20
+Mean AGW       : 26.60
+Mean SPBA      : 20.93
+Mean ppcc      : 19.25
+------------------------------
+-           R = 15           -
+------------------------------
+Request Size   : 15
+Topology Size  : 20
+Mean AGW       : 28.50
+Mean SPBA      : 22.93
+Mean ppcc      : 21.28
+------------------------------
+-           R = 16           -
+------------------------------
+Request Size   : 16
+Topology Size  : 20
+Mean AGW       : 30.40
+Mean SPBA      : 24.89
+Mean ppcc      : 23.25
+------------------------------
+-           R = 17           -
+------------------------------
+Request Size   : 17
+Topology Size  : 20
+Mean AGW       : 32.30
+Mean SPBA      : 26.81
+Mean ppcc      : 25.19
+------------------------------
+-           R = 18           -
+------------------------------
+Request Size   : 18
+Topology Size  : 20
+Mean AGW       : 34.20
+Mean SPBA      : 28.84
+Mean ppcc      : 27.26
+------------------------------
+-           R = 19           -
+------------------------------
+Request Size   : 19
+Topology Size  : 20
+Mean AGW       : 36.10
+Mean SPBA      : 30.58
+Mean ppcc      : 28.94
+------------------------------
+-           R = 20           -
+------------------------------
+Request Size   : 20
+Topology Size  : 20
+Mean AGW       : 38.00
+Mean SPBA      : 32.75
+Mean ppcc      : 31.19
+
+---------------------------------
+---------------------------------
+-	       Gains		-
+-		[R]		-
+---------------------------------
+---------------------------------
+   PPCC v.s. AGW : 24.33 (%)
+   PPCC v.s. SPBA: 6.85  (%) 
+   SPBA v.s. AGW : 18.77 (%) 
+
+
+
+
+Monte Carlo simulation [Rho]
+----------------------------
+------------------------------
+-	    [Rho]	     -
+------------------------------
+Request Size   : 20
+Topology Size  : 20
+Rho            : 0.00
+Mean AGW       : 40.00
+Mean SPBA      : 36.64
+Mean ppcc      : 31.17
+------------------------------
+-	    [Rho]	     -
+------------------------------
+Request Size   : 20
+Topology Size  : 20
+Rho            : 10.00
+Mean AGW       : 40.00
+Mean SPBA      : 36.26
+Mean ppcc      : 31.01
+------------------------------
+-	    [Rho]	     -
+------------------------------
+Request Size   : 20
+Topology Size  : 20
+Rho            : 20.00
+Mean AGW       : 40.00
+Mean SPBA      : 35.71
+Mean ppcc      : 31.25
+------------------------------
+-	    [Rho]	     -
+------------------------------
+Request Size   : 20
+Topology Size  : 20
+Rho            : 30.00
+Mean AGW       : 40.00
+Mean SPBA      : 34.65
+Mean ppcc      : 31.27
+------------------------------
+-	    [Rho]	     -
+------------------------------
+Request Size   : 20
+Topology Size  : 20
+Rho            : 40.00
+Mean AGW       : 40.00
+Mean SPBA      : 34.20
+Mean ppcc      : 32.49
+------------------------------
+-	    [Rho]	     -
+------------------------------
+Request Size   : 20
+Topology Size  : 20
+Rho            : 50.00
+Mean AGW       : 40.00
+Mean SPBA      : 33.16
+Mean ppcc      : 33.16
+------------------------------
+-	    [Rho]	     -
+------------------------------
+Request Size   : 20
+Topology Size  : 20
+Rho            : 60.00
+Mean AGW       : 40.00
+Mean SPBA      : 32.67
+Mean ppcc      : 32.67
+------------------------------
+-	    [Rho]	     -
+------------------------------
+Request Size   : 20
+Topology Size  : 20
+Rho            : 70.00
+Mean AGW       : 40.00
+Mean SPBA      : 31.77
+Mean ppcc      : 31.77
+------------------------------
+-	    [Rho]	     -
+------------------------------
+Request Size   : 20
+Topology Size  : 20
+Rho            : 80.00
+Mean AGW       : 40.00
+Mean SPBA      : 31.26
+Mean ppcc      : 31.26
+------------------------------
+-	    [Rho]	     -
+------------------------------
+Request Size   : 20
+Topology Size  : 20
+Rho            : 90.00
+Mean AGW       : 40.00
+Mean SPBA      : 30.56
+Mean ppcc      : 30.56
+------------------------------
+-	    [Rho]	     -
+------------------------------
+Request Size   : 20
+Topology Size  : 20
+Rho            : 100.00
+Mean AGW       : 40.00
+Mean SPBA      : 30.00
+Mean ppcc      : 30.00
+------------------------------
+------------------------------
+-	    Gains	     -
+-	    [Rho]	     -
+------------------------------
+------------------------------
+   PPCC v.s. AGW : 21.23 (%)
+   PPCC v.s. SPBA: 5.52  (%)
+   SPBA v.s. AGW : 16.62 (%)
+
+
+
+
+
