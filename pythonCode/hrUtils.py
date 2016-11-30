@@ -49,8 +49,7 @@ def makeR(numReq):
     maxInt = 5   # The maximum allowable integer in the array 
     minInt = 1 
     # Create an empty array with the right dimensionality 
-    R = np.empty((0,vecSize), int)
-    
+    R = np.empty((0,vecSize), int)    
     # Iterate over the number of requests , adding each one to the top 
     for r in xrange(numReq):
         row = rndm.sample(range(minInt, maxInt), vecSize)
@@ -73,7 +72,6 @@ def makeV(R,L):
         for j in range(0,cols):
             r = R[i,j]       # Extract the request value 
             V[i,j,r-1] = 1   # rows(rqst r ) col (vnf) requested r (indicates request)  
-    # end for(s) 
     return V
 ##########################################################
 # DSCR  : make the shortest path matrix. 
@@ -128,21 +126,17 @@ def makeU(K):
 # D   :: Vector containing destination nodes. 
 ##########################################################
 def makeD(K,nAR):
-
     # Create a 1xnAR vector D 
     D = np.zeros((nAR))
     totalD = K+nAR
     count = 0
     start = K+1; 
-
     # Insert d (the access router index) inside D vecter 
     for d in range(start,totalD+1):
         D[count] = d
         count = count + 1 
-
     # The vector now contains the indexes of nAR ar's 
     return D 
-
 ##########################################################
 # DSCR  : 
 #          Choose a starting destination node given
@@ -154,13 +148,11 @@ def makeD(K,nAR):
 #   D  :: The revised vector, missing destination o
 ##########################################################
 def chooseO(D): 
-    
     # Choose a random number from group of available AR's
     #- set this value, which is in vector D to o
     numm = len(D)
     rNum = rndm.randint(0,numm-1)       
     o = D[rNum]
-
     # recreate the vector, NOT including the ones in excluded set 
     excludeIndex = {rNum}
     D = [elm for i,elm in enumerate(D) if i not in excludeIndex ]
@@ -176,34 +168,28 @@ def chooseO(D):
 #   ro :: prob vector, indicating prob of mobility. 
 ##########################################################
 def makeRho(Dk,r0):
-    
+    # Deifne local variables 
     nDestNodes = len(Dk)
     ro   = np.zeros((nDestNodes))
     temp = np.zeros((nDestNodes))
-    
+    # Ceck, is initial condition the same as max prob
     if(r0 == 100 ):
         ro[0] = 1
         for dd in range(1,nDestNodes):
             ro[dd] = 0
-        
     else:
-        
         maxVal = 100;
         ro[0] = r0 / 100;
         temp[0] = 0;
-
         # aa should contain [len(D)-1] # of elmnts from [1-(maxVal-r0)] 
         aa = np.random.randint(1,maxVal-r0,len(Dk)-2)
-        
         # Sort the vector, then assign from +1 beyond first index and -1 from last
         temp[1:nDestNodes-1] = np.sort(aa,axis=None)
         # Give the last element the differemce 
         temp[nDestNodes-1] = maxVal - r0
-        
         # iterate over and normailze 
         for dd in range(1,len(Dk)):
-            ro[dd] = (temp[dd] - temp[dd - 1]) /100
-            
+            ro[dd] = (temp[dd] - temp[dd - 1]) /100            
     return ro 
                 
 ##########################################################
@@ -218,14 +204,10 @@ def makeRho(Dk,r0):
 # numInt:: The number of ints to return
 ##########################################################
 def getRandomAR(): 
-    print 
     minInt  = 1  
     maxInt  = 6
     numInts = 1
-
-    num = np.random.randint(minInt,maxInt,size=numInts);
-
-    return num 
+    return np.random.randint(minInt,maxInt,size=numInts)
 
     
 
