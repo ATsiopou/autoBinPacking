@@ -177,17 +177,13 @@ def chooseO(D):
 ##########################################################
 def makeRho(Dk,r0):
     
-    rLen = len(Dk)
-    print "Len(Dk)" , rLen 
-    ro   = np.zeros((rLen))
-    temp = np.zeros((rLen))
-    print "ro", ro 
-    print "temp", temp  
+    nDestNodes = len(Dk)
+    ro   = np.zeros((nDestNodes))
+    temp = np.zeros((nDestNodes))
     
-
     if(r0 == 100 ):
         ro[0] = 1
-        for dd in range(1,len(Dk)):
+        for dd in range(1,nDestNodes):
             ro[dd] = 0
         
     else:
@@ -195,21 +191,16 @@ def makeRho(Dk,r0):
         maxVal = 100;
         ro[0] = r0 / 100;
         temp[0] = 0;
+
+        # aa should contain [len(D)-1] # of elmnts from [1-(maxVal-r0)] 
+        aa = np.random.randint(1,maxVal-r0,len(Dk)-2)
         
-        print "Len(D)" , len(Dk) 
+        # Sort the vector, then assign from +1 beyond first index and -1 from last
+        temp[1:nDestNodes-1] = np.sort(aa,axis=None)
+        # Give the last element the differemce 
+        temp[nDestNodes-1] = maxVal - r0
         
-        # now get a random vector rnPerm(), containing [len(D)-1] # of elmnts from [1-(maxVal-r0)] 
-        #rnPerm = randperm(maxVal - r0, len(Dk)-1 )
-        #numpy.random.randint(low, high=None, size=None, dtype='l')
-        rnPerm = np.random.randint(1,maxVal-r0,len(Dk))
-        print "rnPerm:" , rnPerm 
-        #rnPerm = np.rndm.permutation( )
-        sortedRnPerm = np.sort(rnPerm,axis=None)
-        print "sortedRnPerm: ", sortedRnPerm
-        print "Temp: " , temp 
-        temp[1:len(Dk)-2] = sortedRnPerm
-        temp[len(Dk)] = maxVal - r0
-        
+        # iterate over and normailze 
         for dd in range(1,len(Dk)):
             ro[dd] = (temp[dd] - temp[dd - 1]) /100
             
@@ -231,7 +222,7 @@ def getRandomAR():
     minInt  = 1  
     maxInt  = 6
     numInts = 1
-   
+
     num = np.random.randint(minInt,maxInt,size=numInts);
 
     return num 
