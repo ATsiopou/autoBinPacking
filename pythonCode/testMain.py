@@ -132,9 +132,9 @@ print "o" , o
 print "D" , nD 
 print 
 print "[( Testing ) makeRho(D,1) -- r0 for now is set to 1 ]" 
-#r0 = 0
-#ro = utl.makeRho(D,r0) 
-#print "ro:  ", ro
+r0 = 0
+ro = utl.makeRho(D,r0) 
+print "ro:  ", ro
 print 
 print 
 print "[( Testing ) getRandomAR() ]" 
