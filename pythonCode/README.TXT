@@ -8,24 +8,33 @@ Language
 		     	  	
 				       $ python --version ( vers. >= 2.7 )
 Files 		
-		testMain.py	Temporary test driver, serves as tool indicating function module proper execution. 
+		testMain.py	Temporary test driver, serves as tool indicating function
+				 module proper execution. 
 		main.py		Driver program.
 		loadData.py	Used to initialize variables required for code execution.
 		dijkstra.py	Holds all relevent files for disktra algorithm usage.
-		hrUtils.py	Holds all required heuristic function, awa accessor to other modules.
-		monteCarlo.py	Controller for simulations. Each heuristic is called through this modules init() method.
-
+		hrUtils.py	Holds all required heuristic function, awa accessor to
+				 other modules.
+		monteCarlo.py	Controller for simulations. Each heuristic is called through
+				 this modules init() method.
+		priodict.py	Used in conjunction with dijkstra in module dijkstra.py. 
+				Full tribute goes to the author on said module.  
+		
 Running 
 		Two ways:
 
 		1. Run in terminal 
-		   a) Open a terminal, navigate to the loaction of the file and change the permissions 
+		   a) Open a terminal, navigate to the loaction of the file and change the 
+		      permissions 
 		      	     	       $ sudo chmod 755 main.py
+		   
 		   b) In the same terminal, execute the code: 
+		   
 		      	     	       $ ./main.py 
 		
 		2. Open terminal and run 
 		   		       $ python2.7 main.py
+		
 		3. Opend terminal and run
 		   	 	       $ python2.7 testMain.py 
 				       
