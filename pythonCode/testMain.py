@@ -32,38 +32,69 @@ import hrUtils as utl
 #        b :: RAM memory requirement for vNFi      
 #########################################################
 os.system('clear')
-# Cast prompter return value as an int, to be processed by load.
+
+eqlSymLength=20
+
+# -- start Testing: loadData.PY module 
+print "="*eqlSymLength,  " [(START) : loadData.py  ]", "="*eqlSymLength
 G,R,U,K,L,M,c,u,Sr,D,nAR,nMC = loadData.load(int(loadData.prompter())) 
-# Test printGraph 
-#dkstra.printGraph(dkstra.matToDic(G))
+print "="*eqlSymLength, " [(END) : loadData.py  ]", "="*eqlSymLength
+print 
+# -- end Testing: loadData.PY module 
 
+# -- 
+# -- 
 
-#dkstra.shortestPath(G2,'1','2')
-# Create the shortest path matrix 
-#print dkstra.shortestPath(G,'1','3')
-
-# Testing Dijkstra.PY 
-# --------- start dijkstra testing 
-graph = dkstra.generateMultiLayerGraph(4,3)
-print "MAIN.PY: GRAPH TYPE:  " , type(graph) 
-P = dkstra.shortestPathMatrix(graph) 
-#Take the original graph 
+# -- start Testing : dijstra.PY module 
+print "="*eqlSymLength, " [(START) : dijkstra.py  ]", "="*eqlSymLength
+#testing imported files 
+print
+print "[( Testing ) imported files ]" 
+print "" 
+print "[( Testing ) shortestPath(G,1,2) ]" 
+print dkstra.shortestPath(G,'1','2')
+# shortest path 
+print 
+print "[( Testing ) shortestPathMatrix(G) ]" 
 P = dkstra.shortestPathMatrix(G) 
 print P 
 
-# ------ end  : testing Dijkstra.PY module 
+# --
+# -
+# --
 
-# -------start: Testing hrUtils.PY 
-print " [(START) : hrUtils.py  ]"
+# Testing random grpah  
+print
+print "[( Testing ) random graph creation ]" 
+# Generate a random graph 4x3 
+print 
+print "[( Testing ) genGraph(K,nAR) ]" 
+# Change the name of generatemultilatyergrpah ---- > wrapper : genGraph() to call it insead 
+graph=dkstra.generateMultiLayerGraph(4,3)
+print graph 
+# Shortest path
+print 
+print "[( Testing ) shortestPathMatrix( genGraph(4,3)) ]" 
+P = dkstra.shortestPathMatrix(graph) 
+print P 
+print 
+print "="*eqlSymLength , " [(END) : dijkstra.py  ]", "="*eqlSymLength
+
+# -- end Testing: dijkstra.PY module 
+# -- 
+# -- 
+# -- start Testing : hrUtils.PY module 
+
+print "="*eqlSymLength, " [(START) : hrUtils.py  ]", "="*eqlSymLength
 # V 
 print
 print "[( Testing ) makeV(R,L) ]" 
 print utl.makeV(R,L) 
-
-
 # -- start: Dijktra module wrappers in hUtils.py 
+print
 print "[( Testing hUtils.py ) : wrapper functions  ]"
 # P wrapper in utlis
+print
 print "[( Testing ) makeP(G) ]" 
 print utl.makeP(G) 
 # getpath wrapper 
@@ -71,18 +102,15 @@ print
 print "[( Testing ) getPath(G,srce,dest) ]" 
 print utl.getPath(G,1,3) 
 # -- end: Dijktra module wrappers in hUtils.py 
-
 # R 
 print
 print "[( Testing ) makeR(numRequest) ]" 
 print "nmber of req:" , 5 
 print utl.makeR(5) 
-
 # C 
+print
 print "[( Testing )  C ]"
 print utl.makeC(K,L) 
-print 
-
 # U/u
 print 
 print "[( Testing ) makeU  ]" 
@@ -94,15 +122,58 @@ print "[( Testing ) u  ]"
 print "Dimension of u : " , np.shape(u)  
 print u 
 print 
-print " [(START) : hrUtils.py  ]"
-# -- end: Dijktra module wrappers in hUtils.py 
+print "[( Testing ) makeD ]" 
+D = utl.makeD(K,nAR) 
+print "D" , D 
+print
+print "[( Testing ) chooseO(D) ]" 
+nD,o = utl.chooseO(D) 
+print "o" , o 
+print "D" , nD 
+print 
+print "[( Testing ) makeRho(D,1) -- r0 for now is set to 1 ]" 
+#r0 = 0
+#ro = utl.makeRho(D,r0) 
+#print "ro:  ", ro
+print 
+print 
+print "[( Testing ) getRandomAR() ]" 
+print utl.getRandomAR() 
+print 
+print 
+
+print "="*eqlSymLength, " [(END) : hrUtils.py  ]", "="*eqlSymLength
+print 
+# -- end Testing: Dijktra module wrappers in hUtils.py 
 # -- 
-# -- start: monetCarlo.PY module 
+# -- start Testing: monetCarlo.PY module 
+print "="*eqlSymLength, " [(START) : monteCarlo.py  ]", "="*eqlSymLength
+# -  PPCC  - #
+print
+print "\t\t[( Testing ) case 1 : PPCC / STATICPPCC / SPBL (NAIVE)  ]" 
+print "\t\t","="*eqlSymLength, "\tK\t", "="*eqlSymLength
+print 
+# -    - #
+print 
+print "\t\t[( Testing ) case 2 : PPCC / STATICPPCC / SPBL (NAIVE)   ]" 
+print "\t\t","="*eqlSymLength, "\tR\t", "="*eqlSymLength
+print 
+
+# -  PPCC  - #
+print 
+print "\t\t[( Testing ) case 3 : PPCC / STATICPPCC / SPBL (NAIVE)  ]" 
+print "\t\t","="*eqlSymLength, "\tRho\t", "="*eqlSymLength
+print 
 
 
-# -- end: monetCarlo.PY module 
+
+print "="*eqlSymLength," [(END) : monteCarlo.py  ]", "="*eqlSymLength
+
+
+# -- end Testing: monetCarlo.PY module 
 # -- 
-# -- start: monetCarlo.PY module 
+# -- start Testing: PPCC.PY module 
+
 
 
 

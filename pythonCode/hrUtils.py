@@ -118,8 +118,125 @@ def makeU(K):
     # U should be returned as a 2xK matrix 
     U = np.tile(valU,(1,K))
     return U,u
+##########################################################
+# DSCR  : 
+#         Make destination vector based on number of
+#         access routers     
+# INPUT :        
+# nAR  :: Number of access routers 
+# RTN   :        
+# D   :: Vector containing destination nodes. 
+##########################################################
+def makeD(K,nAR):
 
+    # Create a 1xnAR vector D 
+    D = np.zeros((nAR))
+    totalD = K+nAR
+    count = 0
+    start = K+1; 
 
+    # Insert d (the access router index) inside D vecter 
+    for d in range(start,totalD+1):
+        D[count] = d
+        count = count + 1 
+
+    # The vector now contains the indexes of nAR ar's 
+    return D 
+
+##########################################################
+# DSCR  : 
+#          Choose a starting destination node given
+#          a set of destinations.
+# INPUT :
+#   D  :: vector of destination nodes 
+# RTN   :        
+#   o  :: The starting destination for cache 
+#   D  :: The revised vector, missing destination o
+##########################################################
+def chooseO(D): 
+    
+    # Choose a random number from group of available AR's
+    #- set this value, which is in vector D to o
+    numm = len(D)
+    rNum = rndm.randint(0,numm-1)       
+    o = D[rNum]
+
+    # recreate the vector, NOT including the ones in excluded set 
+    excludeIndex = {rNum}
+    D = [elm for i,elm in enumerate(D) if i not in excludeIndex ]
+    return D,o
+##########################################################
+# DSCR  : 
+#         Create a prob. vector rho. Choose a random
+#         number bw 0 / 100 and return it in ro.
+# INPUT :        
+#   Dk :: vector of destination nodes 
+#   r0 :: The initial rho probability 
+# RTN   :        
+#   ro :: prob vector, indicating prob of mobility. 
+##########################################################
+def makeRho(Dk,r0):
+    
+    rLen = len(Dk)
+    print "Len(Dk)" , rLen 
+    ro   = np.zeros((rLen))
+    temp = np.zeros((rLen))
+    print "ro", ro 
+    print "temp", temp  
+    
+
+    if(r0 == 100 ):
+        ro[0] = 1
+        for dd in range(1,len(Dk)):
+            ro[dd] = 0
+        
+    else:
+        
+        maxVal = 100;
+        ro[0] = r0 / 100;
+        temp[0] = 0;
+        
+        print "Len(D)" , len(Dk) 
+        
+        # now get a random vector rnPerm(), containing [len(D)-1] # of elmnts from [1-(maxVal-r0)] 
+        #rnPerm = randperm(maxVal - r0, len(Dk)-1 )
+        #numpy.random.randint(low, high=None, size=None, dtype='l')
+        rnPerm = np.random.randint(1,maxVal-r0,len(Dk))
+        print "rnPerm:" , rnPerm 
+        #rnPerm = np.rndm.permutation( )
+        sortedRnPerm = np.sort(rnPerm,axis=None)
+        print "sortedRnPerm: ", sortedRnPerm
+        print "Temp: " , temp 
+        temp[1:len(Dk)-2] = sortedRnPerm
+        temp[len(Dk)] = maxVal - r0
+        
+        for dd in range(1,len(Dk)):
+            ro[dd] = (temp[dd] - temp[dd - 1]) /100
+            
+    return ro 
+                
+##########################################################
+# DSCR   : 
+#          Get a random number through 1-5 of AR
+# INPUT  : NONE
+# RTN    :        
+#   num :: Random number to return
+# LOCAL  : 
+# minInt:: lower bound   [  INCLUSIVE  ]   
+# maxInt:: upper bound   [  EXCLUSIVE  ]   
+# numInt:: The number of ints to return
+##########################################################
+def getRandomAR(): 
+    print 
+    minInt  = 1  
+    maxInt  = 6
+    numInts = 1
+   
+    num = np.random.randint(minInt,maxInt,size=numInts);
+
+    return num 
+
+    
 
 # -- End of module 
 
