@@ -4,6 +4,7 @@ import loadData
 import numpy as np 
 import dijkstra as dkstra 
 import hrUtils as utl 
+import objUtils as ob 
 # ADDME
 # Description: This is the main driver program. The
 #              The program is designed to solve the
@@ -36,15 +37,28 @@ os.system('clear')
 eqlSymLength=20
 
 # -- start Testing: loadData.PY module 
+print 
 print "="*eqlSymLength,  " [(START) : loadData.py  ]", "="*eqlSymLength
 G,R,U,K,L,M,c,u,Sr,D,nAR,nMC = loadData.load(int(loadData.prompter())) 
 print "="*eqlSymLength, " [(END) : loadData.py  ]", "="*eqlSymLength
 print 
+
 # -- end Testing: loadData.PY module 
-
 # -- 
 # -- 
+# -- start Testing : objUtils.py
+print 
+print "="*eqlSymLength,  " [(START) : objUtils.py  ]", "="*eqlSymLength
+# Here we are testing functions inside objUtils.py module 
+r0 = 0
+ob.makeOBJ(K,L,R,utl.makeP(G),utl.makeV(R,L), utl.makeC(K,L),D,Sr,utl.makeRho(D,r0) ) 
+print 
+print "="*eqlSymLength, " [(END) : objUtils..py  ]", "="*eqlSymLength
+print 
 
+# -- end Testing: objUtils.PY module 
+# -- 
+# -- 
 # -- start Testing : dijstra.PY module 
 print "="*eqlSymLength, " [(START) : dijkstra.py  ]", "="*eqlSymLength
 #testing imported files 
