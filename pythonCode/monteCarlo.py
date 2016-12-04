@@ -12,10 +12,12 @@ import numpy as np
 ##########################################################
 def monteCarlo(choice):
 
-    if ( choice == 1 ):
+    if ( choice == 'K' ):
     # This simulates monte carlo for nodes K
         # RUN mcarloK
         # retrun : [mPPCC,mNaive,msPPCC]
+        monteCarlo() 
+
     elif ( chcice == 2 ):
     # Simulate monte carlo for Requeasts
         # RUN mcarloP
@@ -41,11 +43,11 @@ def monteCarlo(choice):
 #  d4  :: Data vector of the 4th sim, containing avrg res
 ###########################################################
 def printAverageGains(d1,d2,d3,mcSimulation):
-    print "----------------------------------------\n" 
+    print "----------------------------------------" 
     print " PPCC v.s. AGW : " , calcAverageGains(d1,d2)
     print " PPCC v.s. SPBA: " , calcAverageGains(d1,d3)
     print " SPBA v.s. AGW : " , calcAverageGains(d3,d2)
-    print "----------------------------------------\n" 
+    print "----------------------------------------" 
 ###########################################################
 # DESCR
 #         Calculate the average perentage increase 

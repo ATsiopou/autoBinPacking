@@ -24,7 +24,7 @@ def prompter():
     print 'Options:' 
     print '1) K = 6  , L = 5, R = 5 ' 
     print '2) Monte Carlo Simulation ' 
-    # Prompt statement in Python 
+    # prompt 
     var = raw_input("Enter an option:  ")
     return var 
 ######################################################### 
@@ -34,9 +34,7 @@ def prompter():
 ######################################################### 
 def load(choice):
     if choice == 1 : 
-        #load all values 
-        #G = []; 
-        print "choice 1" 
+
         with open('configFiles/conf1/G.conf') as fileG : 
             G = np.loadtxt(fileG)
         with open('configFiles/conf1/R.conf') as fileR : 
@@ -121,7 +119,7 @@ def makeV(R,L):
     for i in range(0,rows): 
         for j in range(0,cols):
             r = R[i,j]       # Extract the request value 
-            V[i,j,r-1] = 1   # rows(rqst r ) col (vnf) requested r (indicates request)  
+            V[i,j,r-1] = 1   # rows(rqst r ) col (vnf) reqstd r (indicates request)  
     # end for(s) 
     return V
 

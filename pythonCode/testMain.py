@@ -154,6 +154,25 @@ print
 print "[( Testing ) getRandomAR() ]" 
 print utl.getRandomAR() 
 print 
+
+print "[( Testing ) init() ]" 
+print utl.init(R,K,L,U,f1)
+print "[( Testing ) getRandomAR() ]" 
+print utl.getRandomAR() 
+print 
+print "[( Testing ) getRandomAR() ]" 
+print utl.getRandomAR() 
+print 
+print "[( Testing ) getRandomAR() ]" 
+print utl.getRandomAR() 
+print 
+print "[( Testing ) getRandomAR() ]" 
+print utl.getRandomAR() 
+print 
+print "[( Testing ) getRandomAR() ]" 
+print utl.getRandomAR() 
+print 
+
 print 
 
 print "="*eqlSymLength, " [(END) : hrUtils.py  ]", "="*eqlSymLength

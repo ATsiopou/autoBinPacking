@@ -191,7 +191,6 @@ def makeRho(Dk,r0):
         for dd in range(1,len(Dk)):
             ro[dd] = (temp[dd] - temp[dd - 1]) /100            
     return ro 
-                
 ##########################################################
 # DSCR   : 
 #          Get a random number through 1-5 of AR
@@ -208,47 +207,252 @@ def getRandomAR():
     maxInt  = 6
     numInts = 1
     return np.random.randint(minInt,maxInt,size=numInts)
-
+##########################################################
+# DSCR   : 
+#          Initialize the maps and essential components
+#          of algorithm ppcc/staticPPCC/naive 
+# INPUT  : NONE
+# RTN    :
+# Return  :
+# fAllocationTable:: Contains the k,l,r map combo, plus
+#                   two additional cols indicating where
+#                    it failed
+# alloctionTable  :: Set size of table. Holds node,func
+#                    request mapping
+#  ROW  :: K
+#  COL  :: L
+#  AGE  :: r
+#---------------
+#               R :: service request
+#             r,c :: Number of rows/col of Request matrix
+#               x :: x allocation vector
+#              RU :: Remaining utility
+#               x :: x allocation vector
+#              f1 :: x_k_i of objective functions
+##########################################################
+def init(R,K,L,U,f1):
+    r,c    = R.shape 
+    #xfinal = zeros(1,length(f1(:)'))
+    xFinal = np.zeros((1,len( f1.flatten() ))) 
+    xTable = np.zeros((K,L))
+    RU     = np.zeros((size(U)))
+    RU     = U
+    allocationTable = np.zeros((K,L,r))
+    fallocationTable = np.zeros((K,L,r))        
+    pcCost = 0
+    return fallocationTable,allocationTable,xTable,pcCost,RU,xFinal,r,c
+##########################################################
+# Func    : printSummary()
+# Decr    : Prints hosting either
+#           1) successfull
+#           2) failed
+#           3) reason h/u
+# fAllocationTable:: Contains the k,l,r map combo, plus
+#                    two additional cols indicating where
+#                    it failed
+# alloctionTable  :: Set size of table. Holds node,func
+#                    request mapping
+##########################################################
+def printSummary():
+    print " STUB " 
+##########################################################
+# Func    : getNodeFromFunc() 
+# Decr    : Return the node for function f was mapped
+#           to. Plot function utility.
+##########################################################
+def getNodeFromFunc(func,req,K,allocationTable): 
+    node  = 1
+    counter = 1
+    for kInd in range(0,K):
+        if(allocationTable(kInd,func,req) == 1):
+            node = counter
+        counter = counter + 1
+    return node
+##########################################################
+# Func    : getDestinationNode()
+# Decr    : Given the destination set D, the prob.
+#           vector rho,clc. the corresponding
+#           destination node.
+# Return  :
+#   node :: Node corresponding to max rho index in set D    
+##########################################################
+def getStaticDestinationNode(o):
+    # find the max val
+    node = o
+    return node                     
+########################################################
+# Func    : getPpccDestinationNode()
+# Decr    : Given the destination set D, the prob.
+#           vector rho,clc. the corresponding
+#           destination node.
+# Return  :
+#   node :: Node corresponding to max rho index in set D
+########################################################
+def getPpccDestinationNode(D,rho):
+    # find the max val
+    maxx = np.max(rho)
+    node = 1
+    count = 1
     
+    for i in range(1-1, len(rho)-1):
+        if(maxx == rho[i]):
+            node = D[i]
+             
+        count = count + 1
+    return node
+########################################################
+# Func     : getStarting Node
+# Decr     : Calculate the starting node location with
+#            with the minimum cost.
+# Locl vars:
+#   sNode :: The starting node
+#   minVal:: The current minimum value
+#   cost  :: Cost of the path
+#   path  :: The path, in terms of its elem. nodes.
+########################################################
+def getStartNode(G,Sr,d):
+    # Choose some (relatively large) min. value to start.
+    minVal = 100
+    pathCost = np.zeros((1, len(Sr))
+    for ii in range(Sr[1-1], len(Sr)-1):
+        cst,path = getPath(G,ii,d)
+        pathCost[ii] = cst
+        if ( cst <= minVal ):
+            minVal = cst
+            startingNode= path[1]
+        # Reset the cost and paths
+        path = 0
+        cst  = 0
+    return startingNode
+########################################################
+# Func    : getPath()
+# Decr    : Calculate the shortest path.
+# Input:
+#    G    :: The undirected graph
+#    s    :: Source node
+#    s    :: Destination node
+# Rtn  :
+#   cost  :: The cost of the path
+#   path  :: The path elements
+########################################################
+def getPath(G,source,dest):
+    # For each access router find two paths
+    cost, path = dkstra.dijkstra(G,source,dest)
+    path = np.fliplr(path)
+    return cost,path
+########################################################
+# Func    : getPath()
+# Decr    : wrapper function for getPath()
+# Input   :
+#      s :: source
+#      d :: destination
+########################################################
+def getCandidatePath(G,s,d):
+    cost, sNodes = getPath(G,s,d)
+    return sNodes
+########################################################
+# Func    : isHosted()
+# Decr    : Evealuates if func is hosted at node for
+#           service reqest r.
+# Input   :
+#   func :: virtual network function
+#   node :: node k
+# request:: service request.
+#
+# Return  :
+#      b :: Bool, tf true:yes, false:no.
+########################################################
+def isHosted(node,func,request):
+    if(allocationTable(node,func,request)):
+        b = 1
+    else:
+        b = 0
+    return b
+########################################################
+# Func    : host()
+# Decr    : Set the bit in the allocationTable to 1.
+#           Indicates a VNF has been placed on node for
+#           request r.
+# Input   :
+#   func :: virtual network function
+#   node :: node k
+# request:: service request.
+#     b  :: bit, 1/0
+########################################################
+def host(node,func,request,b):
+    allocationTable(node,func,request) = b
+########################################################
+# Func    : setxTable()
+# Decr    : Set the bit in the x vector map/table to 1.
+#           Indicates a VNF has been placed on node for
+#           agnostic to request.
+# Input   :
+#   func :: virtual network function
+#   node :: node k
+#    b   :: either bit to set 1/0
+########################################################
+def setxTable(node,func,b):
+    xTable(node,func) = b
+########################################################
+# Func    : mapTicker
+# Decr    : Records the mapping, and failurs
+# Input   :
+# request:: service request.
+#   func :: virtual network function
+#   node :: node k
+#    b   :: either bit to set h/u
+#      u :: indicates utility failure
+#      h :: indicates function isHosted at node k
+########################################################
+def hostFail(node,func,request,b):
+    fAllocationTable(node,func,request) = b
+########################################################
+# Func    : updateResources()
+# Decr    : Update the resource vector U by decreasing
+#           it by u for function func.
+# Input   :
+#   func :: virtual network function
+#   node :: node k
+#    U   :: Node utility
+#    u   :: function requirement
+########################################################
+def updateResources(U,u,node,func):
+    U(1,node) = U(1,node)-u(1,func)
+    U(2,node) = U(2,node)-u(2,func)
+    return U
+########################################################
+# Func    : canNodeProcess()
+# Decr    : Check to see if node has resources to process
+#           the current vNF in r
+# Input   :
+#   func :: virtual network function
+#   node :: node k
+#    U   :: Node utility
+#    u   :: function requirement
+#
+# Return  : true: yes / false:no
+########################################################
+def canNodeProcess(U,u,node,func):
+    if( (u(1,func) <= U(1,node)) && (u(2,func) <= U(2,node) ) ):
+        b = 1
+    else:
+        b = 0
+    return b
+########################################################
+# Func    : getNode()
+# Decr    : Return the node given the function,
+#           and request
+# Return  : Node
+########################################################
+def getNode(K, func, req, allocationTable):
+    node = 1
+    counter = 1
+    for kInd in range(1-1, K-1):
+        if (allocationTable(kInd, func, req) == 1):
+            node = counter
+            
+        counter = counter + 1
+    return node
+
 
 # -- End of module 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-##########################################################
-# DSCR  : 
-#          
-# INPUT :        
-#      :: 
-#      :: 
-#      :: 
-# RTN   :        
-#      :: 
-##########################################################
-
