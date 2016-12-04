@@ -17,6 +17,7 @@ import random as rndm
 #         utl.getPath(G,start,end)  
 ##############################################################
 
+
 ##########################################################
 # DSCR   : 
 #          Get the path of given source and destination 
@@ -71,7 +72,7 @@ def makeV(R,L):
     for i in range(0,rows): 
         for j in range(0,cols):
             r = R[i,j]       # Extract the request value 
-            V[i,j,r-1] = 1   # rows(rqst r ) col (vnf) requested r (indicates request)  
+            V[i,j,r-1] = 1   # rows(rqst r ) col (vnf) requested r (indicates request) 
     return V
 ##########################################################
 # DSCR  : make the shortest path matrix. 
@@ -235,12 +236,18 @@ def init(R,K,L,U,f1):
     #xfinal = zeros(1,length(f1(:)'))
     xFinal = np.zeros((1,len( f1.flatten() ))) 
     xTable = np.zeros((K,L))
-    RU     = np.zeros((size(U)))
+    RU     = np.zeros((U.shape))
     RU     = U
     allocationTable = np.zeros((K,L,r))
-    fallocationTable = np.zeros((K,L,r))        
+    fAllocationTable = np.zeros((K,L,r))        
     pcCost = 0
-    return fallocationTable,allocationTable,xTable,pcCost,RU,xFinal,r,c
+
+    global fAllocationTable
+    global allocationTable
+    global xTable
+    global xFinal
+    
+    return fAllocationTable,allocationTable,xTable,pcCost,RU,xFinal,r,c
 ##########################################################
 # Func    : printSummary()
 # Decr    : Prints hosting either
@@ -264,7 +271,7 @@ def getNodeFromFunc(func,req,K,allocationTable):
     node  = 1
     counter = 1
     for kInd in range(0,K):
-        if(allocationTable(kInd,func,req) == 1):
+        if( allocationTable[kInd,func,req] == 1 ):
             node = counter
         counter = counter + 1
     return node
@@ -297,33 +304,8 @@ def getPpccDestinationNode(D,rho):
     for i in range(1-1, len(rho)-1):
         if(maxx == rho[i]):
             node = D[i]
-             
         count = count + 1
     return node
-########################################################
-# Func     : getStarting Node
-# Decr     : Calculate the starting node location with
-#            with the minimum cost.
-# Locl vars:
-#   sNode :: The starting node
-#   minVal:: The current minimum value
-#   cost  :: Cost of the path
-#   path  :: The path, in terms of its elem. nodes.
-########################################################
-def getStartNode(G,Sr,d):
-    # Choose some (relatively large) min. value to start.
-    minVal = 100
-    pathCost = np.zeros((1, len(Sr))
-    for ii in range(Sr[1-1], len(Sr)-1):
-        cst,path = getPath(G,ii,d)
-        pathCost[ii] = cst
-        if ( cst <= minVal ):
-            minVal = cst
-            startingNode= path[1]
-        # Reset the cost and paths
-        path = 0
-        cst  = 0
-    return startingNode
 ########################################################
 # Func    : getPath()
 # Decr    : Calculate the shortest path.
@@ -337,9 +319,32 @@ def getStartNode(G,Sr,d):
 ########################################################
 def getPath(G,source,dest):
     # For each access router find two paths
-    cost, path = dkstra.dijkstra(G,source,dest)
-    path = np.fliplr(path)
-    return cost,path
+    cost, sPath, iPath = dkstra.shortestPath(G,source,dest)
+    return cost , iPath
+########################################################
+# Func     : getStarting Node
+# Decr     : Calculate the starting node location with
+#            with the minimum cost.
+# Locl vars:
+#   sNode :: The starting node
+#   minVal:: The current minimum value
+#   cost  :: Cost of the path
+#   path  :: The path, in terms of its elem. nodes.
+########################################################
+def getStartNode(G,Sr,d):
+    # Choose some (relatively large) min. value to start.
+    pathCost = np.zeros((1, len(Sr)))
+    for ii in range(Sr[1-1], len(Sr)-1):
+        cst,path = getPath(G,ii,d)
+        pathCost[ii] = cst
+        if ( cst <= minVal ):
+            minVal = cst
+            startingNode= path[1]
+        # Reset the cost and paths
+        path = 0
+        cst  = 0
+    return startingNode
+
 ########################################################
 # Func    : getPath()
 # Decr    : wrapper function for getPath()
@@ -363,7 +368,7 @@ def getCandidatePath(G,s,d):
 #      b :: Bool, tf true:yes, false:no.
 ########################################################
 def isHosted(node,func,request):
-    if(allocationTable(node,func,request)):
+    if( allocationTable[node,func,request]):
         b = 1
     else:
         b = 0
@@ -380,7 +385,7 @@ def isHosted(node,func,request):
 #     b  :: bit, 1/0
 ########################################################
 def host(node,func,request,b):
-    allocationTable(node,func,request) = b
+    allocationTable[node,func,request] = b
 ########################################################
 # Func    : setxTable()
 # Decr    : Set the bit in the x vector map/table to 1.
@@ -392,7 +397,7 @@ def host(node,func,request,b):
 #    b   :: either bit to set 1/0
 ########################################################
 def setxTable(node,func,b):
-    xTable(node,func) = b
+    xTable[node,func] = b
 ########################################################
 # Func    : mapTicker
 # Decr    : Records the mapping, and failurs
@@ -405,7 +410,7 @@ def setxTable(node,func,b):
 #      h :: indicates function isHosted at node k
 ########################################################
 def hostFail(node,func,request,b):
-    fAllocationTable(node,func,request) = b
+    fAllocationTable[node,func,request] = b
 ########################################################
 # Func    : updateResources()
 # Decr    : Update the resource vector U by decreasing
@@ -417,8 +422,8 @@ def hostFail(node,func,request,b):
 #    u   :: function requirement
 ########################################################
 def updateResources(U,u,node,func):
-    U(1,node) = U(1,node)-u(1,func)
-    U(2,node) = U(2,node)-u(2,func)
+    U[1,node] = U[1,node]-u[1,func]
+    U[2,node] = U[2,node]-u[2,func]
     return U
 ########################################################
 # Func    : canNodeProcess()
@@ -433,7 +438,7 @@ def updateResources(U,u,node,func):
 # Return  : true: yes / false:no
 ########################################################
 def canNodeProcess(U,u,node,func):
-    if( (u(1,func) <= U(1,node)) && (u(2,func) <= U(2,node) ) ):
+    if( (u[1,func] <= U[1,node]) and (u[2,func] <= U[2,node]) ):
         b = 1
     else:
         b = 0
@@ -448,7 +453,7 @@ def getNode(K, func, req, allocationTable):
     node = 1
     counter = 1
     for kInd in range(1-1, K-1):
-        if (allocationTable(kInd, func, req) == 1):
+        if ( allocationTable[kInd, func, req] == 1):
             node = counter
             
         counter = counter + 1

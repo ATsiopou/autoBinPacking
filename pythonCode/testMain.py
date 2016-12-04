@@ -51,7 +51,7 @@ print
 print "="*eqlSymLength,  " [(START) : objUtils.py  ]", "="*eqlSymLength
 # Here we are testing functions inside objUtils.py module 
 r0 = 0
-ob.makeOBJ(K,L,R,utl.makeP(G),utl.makeV(R,L), utl.makeC(K,L),D,Sr,utl.makeRho(D,r0) ) 
+obj,f1,f2,f3,f4 = ob.makeOBJ(K,L,R,utl.makeP(G),utl.makeV(R,L), utl.makeC(K,L),D,Sr,utl.makeRho(D,r0) ) 
 print 
 print "="*eqlSymLength, " [(END) : objUtils..py  ]", "="*eqlSymLength
 print 
@@ -157,8 +157,9 @@ print
 
 print "[( Testing ) init() ]" 
 print utl.init(R,K,L,U,f1)
+print 
 print "[( Testing ) getRandomAR() ]" 
-print utl.getRandomAR() 
+print 
 print 
 print "[( Testing ) getRandomAR() ]" 
 print utl.getRandomAR() 
