@@ -279,7 +279,18 @@ def createLayer(case,G,K,nAR):
             tmp[randRow,k] = np.ceil(rndm.random()*100) 
         
         # Insert the temp matrix into Graph matrix 
-        G[0:n-nAR:,nAR+1:] = tmp 
+        if(0):
+            print "G Shape: " , G.shape
+            print "G: " ,  G
+            print "tmp Shape: " , tmp.shape 
+            print tmp 
+            print "G[0:n-nAR:,nAR+1:]: " , G[0:n-nAR:,n-nAR:].shape
+            print G[0:n-nAR:,n-nAR:]
+            #print G[0:n-nAR:,:nAR+1]
+            #G[0:n-nAR:,nAR+1:] = tmp
+        G[0:n-nAR:,n-nAR:] = tmp 
+        
+        print G 
         # END CASE 3 
     return 0              
 ##########################################################
