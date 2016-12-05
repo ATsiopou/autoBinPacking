@@ -339,7 +339,7 @@ def getPath(G,source,dest):
 def getStartNode(G,Sr,d):
     # Choose some (relatively large) min. value to start.
     minVal = 100; 
-    pathCost = np.zeros((1, len(Sr)))
+    pathCost = np.zeros(Sr.shape)
     start = int(Sr[0])
     end = len(Sr)-1 
 
@@ -353,7 +353,7 @@ def getStartNode(G,Sr,d):
         print cst
 
 
-        pathCost[1,ii] = cst
+        pathCost[ii] = cst
 
 
         print "pCost[",  ii,"] ",  pathCost[ii] 
