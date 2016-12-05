@@ -239,7 +239,7 @@ def monteCarloRho(RUN,Sr,L,V,f1,f2,f3,f4,simType):
             # end for       
         #end 2 while 
 
-        % Calc mean and add as single element of resp. vector. 
+        # Calc mean and add as single element of resp. vector. 
         # Calc mean and add as single element of resp. vector. 
         mPPCC[counter]= np.mean(costPPCC)
         mSPBA[counter]= np.mean(costSPBA) 
