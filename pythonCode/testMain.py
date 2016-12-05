@@ -5,6 +5,7 @@ import numpy as np
 import dijkstra as dkstra 
 import hrUtils as utl 
 import objUtils as ob 
+import monteCarlo as mc 
 # ADDME
 # Description: This is the main driver program. The
 #              The program is designed to solve the
@@ -103,7 +104,8 @@ print "="*eqlSymLength, " [(START) : hrUtils.py  ]", "="*eqlSymLength
 # V 
 print
 print "[( Testing ) makeV(R,L) ]" 
-print utl.makeV(R,L) 
+V = utl.makeV(R,L) 
+print V 
 # -- start: Dijktra module wrappers in hUtils.py 
 print
 print "[( Testing hUtils.py ) : wrapper functions  ]"
@@ -154,26 +156,6 @@ print
 print "[( Testing ) getRandomAR() ]" 
 print utl.getRandomAR() 
 print 
-
-print "[( Testing ) init() ]" 
-print utl.init(R,K,L,U,f1)
-print 
-print "[( Testing ) getRandomAR() ]" 
-print 
-print 
-print "[( Testing ) getRandomAR() ]" 
-print utl.getRandomAR() 
-print 
-print "[( Testing ) getRandomAR() ]" 
-print utl.getRandomAR() 
-print 
-print "[( Testing ) getRandomAR() ]" 
-print utl.getRandomAR() 
-print 
-print "[( Testing ) getRandomAR() ]" 
-print utl.getRandomAR() 
-print 
-
 print 
 
 print "="*eqlSymLength, " [(END) : hrUtils.py  ]", "="*eqlSymLength
@@ -186,6 +168,7 @@ print "="*eqlSymLength, " [(START) : monteCarlo.py  ]", "="*eqlSymLength
 print
 print "\t\t[( Testing ) case 1 : PPCC / STATICPPCC / SPBL (NAIVE)  ]" 
 print "\t\t","="*eqlSymLength, "\tK\t", "="*eqlSymLength
+mc.monteCarlo('K',100,Sr,L,V,f1,f2,f3,f4) 
 print 
 # -    - #
 print 
