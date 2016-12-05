@@ -333,13 +333,19 @@ def getPath(G,source,dest):
 ########################################################
 def getStartNode(G,Sr,d):
     # Choose some (relatively large) min. value to start.
+    minVal = 100; 
     pathCost = np.zeros((1, len(Sr)))
-    for ii in range(Sr[1-1], len(Sr)-1):
+    start = int(Sr[0])
+    end = len(Sr)-1 
+    print "Start:", start 
+    print "End  :", end  
+    for ii in range(0, end):
         cst,path = getPath(G,ii,d)
         pathCost[ii] = cst
         if ( cst <= minVal ):
             minVal = cst
-            startingNode= path[1]
+            print path
+            startingNode= path
         # Reset the cost and paths
         path = 0
         cst  = 0
