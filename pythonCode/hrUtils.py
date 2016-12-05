@@ -30,7 +30,12 @@ import random as rndm
 #  p    ::  3-tupe (cost,stringPath,intPath) 
 ##########################################################
 def getPath(G,source,destination):
-    return dkstra.shortestPath(G,source,destination) 
+    c,pString,pInt= dkstra.shortestPath(G,source,destination) 
+    print "In getPath c:         ", c
+    print "In getPath p:(string) ",pString
+    print pInt 
+     
+    return c,pInt
 ##########################################################
 # Func     : wMakeR
 # Decr     : Make request wrapper function. Loop over the
@@ -232,8 +237,8 @@ def getRandomAR():
 #              f1 :: x_k_i of objective functions
 ##########################################################
 def init(R,K,L,U,f1):
+
     r,c    = R.shape 
-    #xfinal = zeros(1,length(f1(:)'))
     xFinal = np.zeros((1,len( f1.flatten() ))) 
     xTable = np.zeros((K,L))
     RU     = np.zeros((U.shape))
@@ -337,11 +342,23 @@ def getStartNode(G,Sr,d):
     pathCost = np.zeros((1, len(Sr)))
     start = int(Sr[0])
     end = len(Sr)-1 
-    print "Start:", start 
-    print "End  :", end  
+
+    print "pathCost: " , pathCost
+    print "Start   : " , start 
+    print "End     : " , end  
+
+
     for ii in range(0, end):
         cst,path = getPath(G,ii,d)
-        pathCost[ii] = cst
+        print cst
+
+
+        pathCost[1,ii] = cst
+
+
+        print "pCost[",  ii,"] ",  pathCost[ii] 
+
+
         if ( cst <= minVal ):
             minVal = cst
             print path
