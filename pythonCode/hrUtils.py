@@ -481,6 +481,34 @@ def getNode(K, func, req, allocationTable):
             
         counter = counter + 1
     return node
+########################################################
+# Func    : blockDetector()
+# Decr    : Return the blocked requests given allocation
+#           and request Matrix R.
+# Return  : blocked Request r
+########################################################
+def blockDetector (allocationTable, R):
+    rows, cols =R.shape
+    count = 0
+    blockedRequest= []
+    for rr in range(1-1, rows-1):
+        for ff in range(1-1,cols-1):
+            if (sum(allocationTable[:,R[rr,ff],rr])==0):
+                blockedRequest[count]=rr
+                count = count + 1
+                break
+
+    return blockedRequest, count
+########################################################
+# Func    : blockingPenalty()
+# Decr    : Return a penalty cost from gateway to the
+#           Internet.
+# Return  : Random internet-gateway cost.
+########################################################
+def blockingPenalty():
+    minInt = 100
+    maxInt = 500
+    return np.random.randint(minInt, maxInt)
 
 
 # -- End of module 
