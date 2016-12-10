@@ -28,9 +28,9 @@ def monteCarlo(simType,RUN,Sr,L,V,f1,f2,f3,f4):
         print "-"*20
         print "Monte Carlo simulation [R]" 
         print "-"*20
-        mPPCC,mSPBA,mAGW = monteCarloR(RUN,Sr,L,V,f1,f2,f3,f4,simType)        
-        printAverageGains(mPPCC,mSPBA,mAGW,simType) 
-
+        mPPCC,mSPBA,mAGW = monteCarloR(RUN,Sr,L,V,f1,f2,f3,f4,simType)    
+        printAverageGains(mPPCC,mSPBA,mAGW,simType)
+        
     elif( simType == 'Rho' ):
     # Simulate Rho change in monte Carlo
         print "-"*20
@@ -57,15 +57,16 @@ def monteCarlo(simType,RUN,Sr,L,V,f1,f2,f3,f4):
 ###########################################################    
 def monteCarloK(RUN,Sr,L,V,f1,f2,f3,f4,simType): 
 
+
     # Init the vectors of size 1xRUN 
-    costPPCC = np.zeros((1,RUN))
-    costSPBA = np.zeros((1,RUN)) 
-    costAGW  = np.zeros((1,RUN))
+    costPPCC = np.zeros((RUN,), dtype=np.int)
+    costSPBA = np.zeros((RUN,), dtype=np.int) 
+    costAGW  = np.zeros((RUN,), dtype=np.int)
 
     # Init the mean vectors 
-    mPPCC = np.zeros((1,RUN)) 
-    mSPBA = np.zeros((1,RUN))
-    mAGW = np.zeros((1,RUN))
+    mPPCC = np.zeros((RUN,), dtype=np.int) 
+    mSPBA = np.zeros((RUN,), dtype=np.int)
+    mAGW = np.zeros((RUN,), dtype=np.int)
     
     # Init the monte carlo vars 
     NUMBER_REQUESTS = 5
@@ -92,8 +93,8 @@ def monteCarloK(RUN,Sr,L,V,f1,f2,f3,f4,simType):
                 P     = utl.makeP(G)
                 
                 # Evalutate Each Algorithm with the above inputs 
-                costPPCC[i] = hrstc.PPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)
-                costSPBA[i] = hrstc.SPBA(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)
+                costPPCC[i] = hrstc.PPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)[0]
+                costSPBA[i] = hrstc.SPBA(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)[0]
                 costAGW[i]  = hrstc.AGW(P,D,R,rho)
                 
                 # Increase itter by one 
@@ -131,16 +132,17 @@ def monteCarloK(RUN,Sr,L,V,f1,f2,f3,f4,simType):
 #  mNaive :: monte c naive avrg sol vector for each R
 ###########################################################    
 def monteCarloR(RUN,Sr,L,V,f1,f2,f3,f4,simType): 
-        
+
     # Create size/mem the matricies requires 
-    costPPCC = np.zeros((1,RUN))
-    costSPBA = np.zeros((1,RUN)) 
-    costAGW  = np.zeros((1,RUN))
+    costPPCC = np.zeros((RUN,), dtype=np.int)
+    costSPBA = np.zeros((RUN,), dtype=np.int) 
+    costAGW  = np.zeros((RUN,), dtype=np.int)
 
     # Init the mean vectors 
-    mPPCC = np.zeros((1,RUN)) 
-    mSPBA = np.zeros((1,RUN))
-    mAGW = np.zeros((1,RUN))
+    mPPCC = np.zeros((RUN,), dtype=np.int) 
+    mSPBA = np.zeros((RUN,), dtype=np.int)
+    mAGW = np.zeros((RUN,), dtype=np.int)
+    
     
     # Define/init local vars 
     K     = 20
@@ -196,14 +198,14 @@ def monteCarloR(RUN,Sr,L,V,f1,f2,f3,f4,simType):
 ###########################################################    
 def monteCarloRho(RUN,Sr,L,V,f1,f2,f3,f4,simType):         
     # Create size/mem the matricies requires 
-    costPPCC = np.zeros((1,RUN))
-    costSPBA = np.zeros((1,RUN)) 
-    costAGW  = np.zeros((1,RUN))
+    costPPCC = np.zeros((RUN,), dtype=np.int)
+    costSPBA = np.zeros((RUN,), dtype=np.int) 
+    costAGW  = np.zeros((RUN,), dtype=np.int)
 
     # Init the mean vectors 
-    mPPCC = np.zeros((1,RUN)) 
-    mSPBA = np.zeros((1,RUN))
-    mAGW = np.zeros((1,RUN))
+    mPPCC = np.zeros((RUN,), dtype=np.int) 
+    mSPBA = np.zeros((RUN,), dtype=np.int)
+    mAGW = np.zeros((RUN,), dtype=np.int)
 
     # Define/init local vars 
     K     = 20
