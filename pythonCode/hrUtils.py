@@ -176,6 +176,7 @@ def chooseO(D):
 def makeRho(Dk,r0):
     # Deifne local variables 
     nDestNodes = len(Dk)
+    ro   = []
     ro   = np.zeros((nDestNodes))
     temp = np.zeros((nDestNodes))
     # Ceck, is initial condition the same as max prob
@@ -488,13 +489,26 @@ def getNode(K, func, req, allocationTable):
 # Return  : blocked Request r
 ########################################################
 def blockDetector (allocationTable, R):
+
+    debug = 1
+
     rows, cols =R.shape
+    if (debug):
+        print "rows: ", rows
+        print "col : ", cols
     count = 0
-    blockedRequest= []
+    #blockedRequest= []
+    blockedRequest = np.zeros((rows))
+    print "blockedRequest", blockedRequest
     for rr in range(1-1, rows-1):
         for ff in range(1-1,cols-1):
-            if (sum(allocationTable[:,R[rr,ff],rr])==0):
-                blockedRequest[count]=rr
+            #if (sum(allocationTable[:,R[rr,ff],rr])==0):
+             if(allocationTable[:,R[rr,ff],rr].all() == 0 ):
+                if(debug):
+                    print "rr   : ", rr
+                    print "count: ", count
+                    print "blockedRequest[count] :" ,blockedRequest[count]
+                blockedRequest[count]=rr+1
                 count = count + 1
                 break
 

@@ -142,9 +142,10 @@ def shortestPath(G,start,end):
 
     # Extract the cost and path                                       
     Cost = D[stringPath[-1]]
-    # Convert the path to array of ints 
-    intPath = map(int, stringPath) 
-    
+    # Convert the path to array of ints
+    #intPath = []
+    intPath = map(int, stringPath)
+
     if ( debug ) :
         print "Cost: ", Cost 
         print "Path: ", stringPath 
