@@ -230,10 +230,6 @@ def AGW(P,D,R,rho):
     # Define the GateWay
     GW = 1
 
-    # Get the first destination
-    # d1 = getDestinaion(D, rho)
-    # pathCost1 = P(GW, d1);
-
     sumCost = 0
     rrr, c = R.shape
 

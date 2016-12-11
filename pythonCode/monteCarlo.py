@@ -107,6 +107,9 @@ def monteCarloK(RUN,Sr,L,V,f1,f2,f3,f4,simType):
                     break
                 # end For 
             #end While 
+
+        print costPPCC
+
         mPPCC[counter]= np.mean(costPPCC)
         mSPBA[counter]= np.mean(costSPBA) 
         mAGW[counter] = np.mean(costAGW)
@@ -205,7 +208,7 @@ def monteCarloRho(RUN,Sr,L,V,f1,f2,f3,f4,simType):
     # Init the mean vectors 
     mPPCC = np.zeros((RUN,), dtype=np.int) 
     mSPBA = np.zeros((RUN,), dtype=np.int)
-    mAGW = np.zeros((RUN,), dtype=np.int)
+    mAGW  = np.zeros((RUN,), dtype=np.int)
 
     # Define/init local vars 
     K     = 20

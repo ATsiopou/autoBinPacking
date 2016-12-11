@@ -31,10 +31,6 @@ import random as rndm
 ##########################################################
 def getPath(G,source,destination):
     c,pString,pInt= dkstra.shortestPath(G,source,destination) 
-    print "In getPath c:         ", c
-    print "In getPath p:(string) ",pString
-    print pInt 
-     
     return c,pInt
 ##########################################################
 # Func     : wMakeR
@@ -351,7 +347,6 @@ def getStartNode(G,Sr,d):
 
         if ( cst <= minVal ):
             minVal = cst
-            print path
             startingNode= path
         # Reset the cost and paths
         path = 0
@@ -479,24 +474,13 @@ def getNode(K, func, req, allocationTable):
 ########################################################
 def blockDetector (allocationTable, R):
 
-    debug = 0
-
     rows, cols =R.shape
-    if (debug):
-        print "rows: ", rows
-        print "col : ", cols
     count = 0
-    #blockedRequest= []
     blockedRequest = np.zeros((rows))
     
     for rr in range(1-1, rows-1):
         for ff in range(1-1,cols-1):
-            #if (sum(allocationTable[:,R[rr,ff],rr])==0):
              if(allocationTable[:,R[rr,ff],rr].all() == 0 ):
-                if(debug):
-                    print "rr   : ", rr
-                    print "count: ", count
-                    print "blockedRequest[count] :" ,blockedRequest[count]
                 blockedRequest[count]=rr+1
                 count = count + 1
                 break
@@ -511,7 +495,7 @@ def blockDetector (allocationTable, R):
 def blockingPenalty():
     minInt = 100
     maxInt = 500
-    return float( np.random.randint(minInt, maxInt) ) 
+    return float(np.random.randint(minInt, maxInt)) 
 
 
 # -- End of module 
