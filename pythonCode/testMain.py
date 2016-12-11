@@ -163,12 +163,12 @@ print
 # -- end Testing: Dijktra module wrappers in hUtils.py 
 # -- 
 # -- start Testing: monetCarlo.PY module 
-print "="*eqlSymLength, " [(START) : 1.py  ]", "="*eqlSymLength
+print "="*eqlSymLength, " [(START) : monteCarlo.py  ]", "="*eqlSymLength
 # -  PPCC  - #
 print
 print "\t\t[( Testing ) case 1 : PPCC / STATICPPCC / SPBL (NAIVE)  ]" 
 print "\t\t","="*eqlSymLength, "\tK\t", "="*eqlSymLength
-mc.monteCarlo('K',100,Sr,L,V,f1,f2,f3,f4) 
+mc.monteCarlo('K',10,Sr,L,V,f1,f2,f3,f4) 
 print 
 # -    - #
 print 

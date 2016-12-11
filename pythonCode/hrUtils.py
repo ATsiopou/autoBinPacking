@@ -31,10 +31,6 @@ import random as rndm
 ##########################################################
 def getPath(G,source,destination):
     c,pString,pInt= dkstra.shortestPath(G,source,destination) 
-    print "In getPath c:         ", c
-    print "In getPath p:(string) ",pString
-    print pInt 
-     
     return c,pInt
 ##########################################################
 # Func     : wMakeR
@@ -175,10 +171,12 @@ def chooseO(D):
 ##########################################################
 def makeRho(Dk,r0):
     # Deifne local variables 
+    if ( len(Dk) == 0):
+        nDestNodes = 1
     nDestNodes = len(Dk)
-    ro   = []
     ro   = np.zeros((nDestNodes))
     temp = np.zeros((nDestNodes))
+    
     # Ceck, is initial condition the same as max prob
     if(r0 == 100 ):
         ro[0] = 1
@@ -210,8 +208,8 @@ def makeRho(Dk,r0):
 # numInt:: The number of ints to return
 ##########################################################
 def getRandomAR(): 
-    minInt  = 1  
-    maxInt  = 6
+    minInt  = 3  
+    maxInt  = 7
     numInts = 1
     return np.random.randint(minInt,maxInt,size=numInts)
 ##########################################################
@@ -238,7 +236,6 @@ def getRandomAR():
 #              f1 :: x_k_i of objective functions
 ##########################################################
 def init(R,K,L,U,f1):
-
     r,c    = R.shape 
     xFinal = np.zeros((1,len( f1.flatten() ))) 
     xTable = np.zeros((K,L))
@@ -344,25 +341,12 @@ def getStartNode(G,Sr,d):
     start = int(Sr[0])
     end = len(Sr)-1 
 
-    print "pathCost: " , pathCost
-    print "Start   : " , start 
-    print "End     : " , end  
-
-
     for ii in range(0, end):
         cst,path = getPath(G,ii,d)
-        print cst
-
-
         pathCost[ii] = cst
-
-
-        print "pCost[",  ii,"] ",  pathCost[ii] 
-
 
         if ( cst <= minVal ):
             minVal = cst
-            print path
             startingNode= path
         # Reset the cost and paths
         path = 0
@@ -490,24 +474,13 @@ def getNode(K, func, req, allocationTable):
 ########################################################
 def blockDetector (allocationTable, R):
 
-    debug = 1
-
     rows, cols =R.shape
-    if (debug):
-        print "rows: ", rows
-        print "col : ", cols
     count = 0
-    #blockedRequest= []
     blockedRequest = np.zeros((rows))
-    print "blockedRequest", blockedRequest
+    
     for rr in range(1-1, rows-1):
         for ff in range(1-1,cols-1):
-            #if (sum(allocationTable[:,R[rr,ff],rr])==0):
              if(allocationTable[:,R[rr,ff],rr].all() == 0 ):
-                if(debug):
-                    print "rr   : ", rr
-                    print "count: ", count
-                    print "blockedRequest[count] :" ,blockedRequest[count]
                 blockedRequest[count]=rr+1
                 count = count + 1
                 break
@@ -522,7 +495,7 @@ def blockDetector (allocationTable, R):
 def blockingPenalty():
     minInt = 100
     maxInt = 500
-    return np.random.randint(minInt, maxInt)
+    return float(np.random.randint(minInt, maxInt)) 
 
 
 # -- End of module 
