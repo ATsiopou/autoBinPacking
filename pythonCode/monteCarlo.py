@@ -58,14 +58,14 @@ def monteCarlo(simType,RUN,Sr,L,V,f1,f2,f3,f4):
 def monteCarloK(RUN,Sr,L,V,f1,f2,f3,f4,simType): 
 
     # Init the vectors of size 1xRUN 
-    costPPCC = np.zeros((1,RUN))
-    costSPBA = np.zeros((1,RUN)) 
-    costAGW  = np.zeros((1,RUN))
+    costPPCC = np.zeros((RUN), dtype=np.int)
+    costSPBA = np.zeros((RUN), dtype=np.int) 
+    costAGW  = np.zeros((RUN), dtype=np.int)
 
     # Init the mean vectors 
-    mPPCC = np.zeros((1,RUN)) 
-    mSPBA = np.zeros((1,RUN))
-    mAGW = np.zeros((1,RUN))
+    mPPCC = np.zeros((RUN), dtype=np.int) 
+    mSPBA = np.zeros((RUN), dtype=np.int)
+    mAGW = np.zeros((RUN), dtype=np.int)
     
     # Init the monte carlo vars 
     NUMBER_REQUESTS = 5
@@ -133,15 +133,15 @@ def monteCarloK(RUN,Sr,L,V,f1,f2,f3,f4,simType):
 def monteCarloR(RUN,Sr,L,V,f1,f2,f3,f4,simType): 
         
     # Create size/mem the matricies requires 
-    costPPCC = np.zeros((1,RUN))
-    costSPBA = np.zeros((1,RUN)) 
-    costAGW  = np.zeros((1,RUN))
+    costPPCC = np.zeros((RUN), dtype=np.int)
+    costSPBA = np.zeros((RUN), dtype=np.int) 
+    costAGW  = np.zeros((RUN), dtype=np.int)
 
     # Init the mean vectors 
-    mPPCC = np.zeros((1,RUN)) 
-    mSPBA = np.zeros((1,RUN))
-    mAGW = np.zeros((1,RUN))
-    
+    mPPCC = np.zeros((RUN), dtype=np.int) 
+    mSPBA = np.zeros((RUN), dtype=np.int)
+    mAGW  = np.zeros((RUN), dtype=np.int)
+
     # Define/init local vars 
     K     = 20
     nAR   = 5 
@@ -196,14 +196,15 @@ def monteCarloR(RUN,Sr,L,V,f1,f2,f3,f4,simType):
 ###########################################################    
 def monteCarloRho(RUN,Sr,L,V,f1,f2,f3,f4,simType):         
     # Create size/mem the matricies requires 
-    costPPCC = np.zeros((1,RUN))
-    costSPBA = np.zeros((1,RUN)) 
-    costAGW  = np.zeros((1,RUN))
+    costPPCC = np.zeros((RUN), dtype=np.int)
+    costSPBA = np.zeros((RUN), dtype=np.int) 
+    costAGW  = np.zeros((RUN), dtype=np.int)
 
     # Init the mean vectors 
-    mPPCC = np.zeros((1,RUN)) 
-    mSPBA = np.zeros((1,RUN))
-    mAGW = np.zeros((1,RUN))
+    mPPCC = np.zeros((RUN), dtype=np.int) 
+    mSPBA = np.zeros((RUN), dtype=np.int)
+    mAGW  = np.zeros((RUN), dtype=np.int)
+
 
     # Define/init local vars 
     K     = 20
