@@ -263,8 +263,35 @@ def init(R,K,L,U,f1):
 # alloctionTable  :: Set size of table. Holds node,func
 #                    request mapping
 ##########################################################
-def printSummary():
-    print " STUB " 
+def printSummary(R,K,L,D,allocationTable):
+    row , col = R.shape 
+    numNodes  = K 
+    
+    #fprintf('Desetinations:\t')
+    #fprintf( [ repmat('%d   ',1,size(D,2)) '\n'], D')
+    #fprintf('\n')
+    #fprintf('Probability  : \t')
+    #fprintf( [ repmat('%.2f   ',1,size(rho,2)) '\n'], rho')
+    #fprintf('Request Matrix: \n\n')
+    #fprintf( [ repmat('\t%d   ',1,size(R,2)) '\n'], R')
+    print " " 
+    print " " 
+    
+    print "----------------------------------------------------------------"
+    print "|     Request     |    Order    |   Function  |   Mapped node   |"
+    print "----------------------------------------------------------------"
+    for rIndex in range(0,row-1):
+        reqi = R[rIndex,:]
+        for f in range(0,col):
+            rNode = getNodeFromFunc(reqi[f],rIndex,numNodes,allocationTable)
+            rFunc = reqi[f]
+            #val = fAllocationTable(rNode,rFunc,rIndex) 
+            print "\t",rIndex,"\t\t",f,"\t\t",rFunc,"\t\t",rNode
+            
+        
+        
+        
+
 ##########################################################
 # Func    : getNodeFromFunc() 
 # Decr    : Return the node for function f was mapped
@@ -430,8 +457,8 @@ def hostFail(node,func,request,b):
 #    u   :: function requirement
 ########################################################
 def updateResources(U,u,node,func):
+    U[0,node] = U[0,node]-u[0,func]
     U[1,node] = U[1,node]-u[1,func]
-    U[2,node] = U[2,node]-u[2,func]
     return U
 ########################################################
 # Func    : canNodeProcess()
@@ -446,7 +473,10 @@ def updateResources(U,u,node,func):
 # Return  : true: yes / false:no
 ########################################################
 def canNodeProcess(U,u,node,func):
-    if( (u[1,func] <= U[1,node]) and (u[2,func] <= U[2,node]) ):
+    #print "U: ",  U 
+    #print "u: ",  u 
+    
+    if( (u[0,func] <= U[0,node]) and (u[1,func] <= U[1,node]) ):
         b = 1
     else:
         b = 0
@@ -480,7 +510,7 @@ def blockDetector (allocationTable, R):
     
     for rr in range(1-1, rows-1):
         for ff in range(1-1,cols-1):
-             if(allocationTable[:,R[rr,ff],rr].all() == 0 ):
+            if(np.all(allocationTable[:,R[rr,ff],rr] == 0)):
                 blockedRequest[count]=rr+1
                 count = count + 1
                 break
@@ -496,20 +526,15 @@ def blockingPenalty():
     minInt = 100
     maxInt = 500
     return float(np.random.randint(minInt, maxInt)) 
-
-
-# -- End of module 
-
 ########################################################
 # Func    : checkList(L,val)
 # Decr    : Return 1 if val is in L, 0 otherwise.
 # Return  : 1 or 0.
 ########################################################
-
 def checkList(L, val):
     LL = L[0]
-
     if (val in LL):
         return 1
     else:
         return 0
+# -- End of module 

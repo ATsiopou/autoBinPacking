@@ -164,19 +164,20 @@ print
 # -- 
 # -- start Testing: monetCarlo.PY module 
 print "="*eqlSymLength, " [(START) : monteCarlo.py  ]", "="*eqlSymLength
-# -  PPCC  - #
+# -  Montecarlo K   - #
 print
 print "\t\t[( Testing ) case 1 : PPCC / STATICPPCC / SPBL (NAIVE)  ]" 
 print "\t\t","="*eqlSymLength, "\tK\t", "="*eqlSymLength
-mc.monteCarlo('K',10,Sr,L,V,f1,f2,f3,f4) 
+
+print mc.monteCarlo('K',10,Sr,L,V,f1,f2,f3,f4) 
 print 
-# -    - #
+# -  Monte carlo R  - #
 print 
 print "\t\t[( Testing ) case 2 : PPCC / STATICPPCC / SPBL (NAIVE)   ]" 
 print "\t\t","="*eqlSymLength, "\tR\t", "="*eqlSymLength
 print 
 
-# -  PPCC  - #
+# -  MonteCarlo Rho   - #
 print 
 print "\t\t[( Testing ) case 3 : PPCC / STATICPPCC / SPBL (NAIVE)  ]" 
 print "\t\t","="*eqlSymLength, "\tRho\t", "="*eqlSymLength

@@ -12,16 +12,10 @@ import numpy as np
 ##########################################################
 def monteCarlo(simType,RUN,Sr,L,V,f1,f2,f3,f4):
     
-    print simType
-    
     if ( simType == 'K' ):
     # This simulates monte carlo for nodes K
-        print "-"*20
-        print "Monte Carlo simulation [K]"
-        print "-"*20
-
-        mPPCC,mSPBA,mAGW = monteCarloK(RUN,Sr,L,V,f1,f2,f3,f4,simType)
-        #printAverageGains(mPPCC,mSPBA,mAGW,simType) 
+        mPPCC,mSPBA,mBPCC,mAGW,mCAGW = monteCarloK(RUN,Sr,L,V,f1,f2,f3,f4,simType)
+        printAverageGains(mPPCC,mSPBA,mAGW,simType) 
 
     elif ( simType == 'R' ):
     # Simulate monte carlo for Requeasts
@@ -29,6 +23,7 @@ def monteCarlo(simType,RUN,Sr,L,V,f1,f2,f3,f4):
         print "Monte Carlo simulation [R]" 
         print "-"*20
         mPPCC,mSPBA,mAGW = monteCarloR(RUN,Sr,L,V,f1,f2,f3,f4,simType)        
+        mPPCC,mSPBA,mBPCC,mAGW,mCAGW
         printAverageGains(mPPCC,mSPBA,mAGW,simType) 
 
     elif( simType == 'Rho' ):
@@ -57,63 +52,83 @@ def monteCarlo(simType,RUN,Sr,L,V,f1,f2,f3,f4):
 ###########################################################    
 def monteCarloK(RUN,Sr,L,V,f1,f2,f3,f4,simType): 
 
+    print "RUN IN MONTECARLOK: " , RUN 
+
     # Init the vectors of size 1xRUN 
     costPPCC = np.zeros((RUN), dtype=np.int)
     costSPBA = np.zeros((RUN), dtype=np.int) 
+    costBPCC = np.zeros((RUN), dtype=np.int) 
     costAGW  = np.zeros((RUN), dtype=np.int)
+    costCAGW = np.zeros((RUN), dtype=np.int)
 
     # Init the mean vectors 
     mPPCC = np.zeros((RUN), dtype=np.int) 
     mSPBA = np.zeros((RUN), dtype=np.int)
-    mAGW = np.zeros((RUN), dtype=np.int)
-    
+    mBPCC = np.zeros((RUN), dtype=np.int)
+    mAGW  = np.zeros((RUN), dtype=np.int)
+    mCAGW = np.zeros((RUN), dtype=np.int)
+
     # Init the monte carlo vars 
     NUMBER_REQUESTS = 5
     K_START = 10
     K_END   = 20
-    counter = 1
+    counter = 0
 
     # Start the main iteration loop 
     for kk in range(K_START,K_END):
         K = kk
-        AuxVec=1
+        #AuxVec=1
         
-        while( AuxVec <= RUN ):
-            for i in range(1,RUN):
-                # Generate the inputs for the iteration 
-                R     = utl.makeR(NUMBER_REQUESTS)
-                U,u   = utl.makeU(K)
-                C     = utl.makeC(K,L)
-                nAR   = utl.getRandomAR()
-                D     = utl.makeD(K,nAR)
-                D,o   = utl.chooseO(D)
-                rho   = utl.makeRho(D,1)
-                G     = dk.generateMultiLayerGraph(K,nAR)
-                P     = utl.makeP(G)
+        #while( AuxVec <= RUN ):
+        for i in range(0,RUN-1):
+            # Generate the inputs for the iteration 
+            R     = utl.makeR(NUMBER_REQUESTS)
+            U,u   = utl.makeU(K)
+            C     = utl.makeC(K,L)
+            nAR   = utl.getRandomAR()
+            D     = utl.makeD(K,nAR)
+            D,o   = utl.chooseO(D)
+            rho   = utl.makeRho(D,1)
+            G     = dk.generateMultiLayerGraph(K,nAR)
+            P     = utl.makeP(G)
                 
-                # Evalutate Each Algorithm with the above inputs 
-                costPPCC[i] = hrstc.PPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)[0]
-                costSPBA[i] = hrstc.SPBA(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)[0]
-                costAGW[i]  = hrstc.AGW(P,D,R,rho)
-                
-                # Increase itter by one 
-                AuxVec = AuxVec+1
-                
-                if (AuxVec == RUN): 
-                    break
-                else:
-                    AuxVec = AuxVec+1
-                    break
+            print "Iteration : " , i 
+            print "nAR : ", nAR  
+            
+            print "G   : ", G 
+            
+            
+            # Evalutate Each Algorithm with the above inputs 
+            costPPCC[i] = hrstc.PPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)[0]            
+            costSPBA[i] = hrstc.SPBA(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)[0]
+            costBPCC[i] = hrstc.BPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)[0]
+            costCAGW[i]  = hrstc.CAGW(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)[0]                
+            costAGW[i]  = hrstc.AGW(P,D,R,rho)
+            # Increase itter by one 
+            #AuxVec = AuxVec+1
+            #if (AuxVec == RUN): 
+             #   break
+            #else:
+            #    AuxVec = AuxVec+1
+            #    break
                 # end For 
             #end While 
+        print "costPPCC : " , costPPCC
+        print "costSPBA : " , costSPBA
+        print "costBPCC : " , costBPCC
+        print "costCAGW : ", costCAGW 
+        print "costAGW  : ", costAGW 
+         
         mPPCC[counter]= np.mean(costPPCC)
-        mSPBA[counter]= np.mean(costSPBA) 
+        mSPBA[counter]= np.mean(costSPBA)
+        mBPCC[counter]= np.mean(costBPCC)
+        mCAGW[counter] = np.mean(costCAGW)
         mAGW[counter] = np.mean(costAGW)
-            
+        
         #printRound(kk,NUMBER_REQUESTS,rho,mPPCC(counter),mNaive(counter),msPPCC(counter),mcSimulation)
         counter = counter +1      
     # end for 
-    return mPPCC,mSPBA,mAGW
+    return mPPCC,mSPBA,mBPCC,mAGW,mCAGW
 
 
 
@@ -264,9 +279,9 @@ def monteCarloRho(RUN,Sr,L,V,f1,f2,f3,f4,simType):
 ###########################################################
 def printAverageGains(d1,d2,d3,mcSimulation):
     print "----------------------------------------" 
-    print " PPCC v.s. AGW : " , calcAverageGains(d1,d2)
-    print " PPCC v.s. SPBA: " , calcAverageGains(d1,d3)
-    print " SPBA v.s. AGW : " , calcAverageGains(d3,d2)
+    print " PPCC v.s. AGW : " , calculateGains(d1,d2)
+    print " PPCC v.s. SPBA: " , calculateGains(d1,d3)
+    print " SPBA v.s. AGW : " , calculateGains(d3,d2)
     print "----------------------------------------" 
 ###########################################################
 # DESCR

@@ -69,8 +69,8 @@ def PPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4):
     rows,cols = R.shape
     blockingProbability = float(numberOfblockedRequest)/float(rows)
 
-        #print('Cost ppcc : #2.2f\n\n', pcCost)
-        #printSummary(R,K,L,D,allocationTable,fAllocationTable)
+    #print('Cost ppcc : #2.2f\n\n', pcCost)
+    utl.printSummary(R,K,L,D,allocationTable)
     return cost, blockingProbability
 
 
@@ -119,7 +119,7 @@ def BPCC(G, K, L, R, P, V, C, D, U, u, Sr, nAR, rho, o, f1, f2, f3, f4):
             if(utl.checkList(utl.blockDetector(allocationTable, R), rr+1)):
 
                 CRC = 0
-                CRC = P[GW, D[dd]] + utl.blockingPenalty
+                CRC = P[GW, D[dd]] + utl.blockingPenalty()
                 pcCost = pcCost + rho[dd]*CRC
                 
             else:
@@ -243,7 +243,7 @@ def AGW(P,D,R,rho):
 
     return cost
 #======================================================#
-#=      AGW   :  Capacitated All from GateWay         =#
+#=      CAGW   : Capacitated All from GateWay         =#
 #======================================================#
 def CAGW(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4):
     # Define the GateWay
@@ -258,13 +258,13 @@ def CAGW(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4):
         FPL = R[rr,:]
         cNode = GW
         for ff in range (1-1 ,len(FPL)-1):
-            cFunc = FPL[ff]
+            cFunc = FPL[ff] - 1
             if (utl.canNodeProcess(U, u, cNode, cFunc)):
                 #if (isHosted(cNode, cFunc, rr) == 0):
                 utl.host(cNode, cFunc, rr, 1)
                 utl.setxTable(cNode, cFunc, 1)
                 U = utl.updateResources(U, u, cNode, cFunc)
-                pcCost = pcCost + C(cNode, cFunc)
+                pcCost = pcCost + C[cNode, cFunc]
             else:
                 utl.hostFail(cNode, cFunc, rr, 'h')
 
@@ -275,8 +275,7 @@ def CAGW(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4):
         for rr in range (1-1, rrr-1):
             if (utl.checkList(utl.blockDetector(allocationTable, R), rr+1)):
                 CRC = 0
-                CRC = P[GW, D[dd]] + utl.blockingPenalty
-
+                CRC = P[GW, D[dd]] + utl.blockingPenalty()
                 pcCost = pcCost + rho[dd] * CRC
             else:
                 CRC = 0
