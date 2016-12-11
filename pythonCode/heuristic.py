@@ -45,7 +45,7 @@ def PPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4):
         for rr in range(1-1,r-1):
         # length of the network elemeents
 
-            if ( checkList(utl.blockDetector(allocationTable, R), rr+1) ):
+            if ( utl.checkList(utl.blockDetector(allocationTable, R), rr+1) ):
                 CRC = 0
                 CRC = P[GW, D[dd]] + utl.blockingPenalty()
                 pcCost = pcCost + rho[dd] * CRC
@@ -88,24 +88,25 @@ def BPCC(G, K, L, R, P, V, C, D, U, u, Sr, nAR, rho, o, f1, f2, f3, f4):
     for rr in range(1 - 1, r - 1):
         s = utl.getStartNode(G, Sr, d)
         sNodes = utl.getCandidatePath(G, s, d)
-        sNodes = sNodes[1:len(sNodes) - 1]
-        CPL = np.sort(s)
-        FPL = R[rr, :]
+        if (sNodes != 0):
+            sNodes = sNodes[1:len(sNodes) - 1]
+            CPL = np.sort(s)
+            FPL = R[rr, :]
 
-        for ff in range(1 - 1, len(FPL) - 1):
-            cNode = CPL[ff]
-            for kk in range(1, len(CPL)):
-                cFunc = FPL[kk]
-                if (utl.canNodeProcess(U, u, cNode, cFunc)):
-                    # if (isHosted(cNode, cFunc, rr) == 0):
-                    utl.host(cNode, cFunc, rr, 1)
-                    utl.setxTable(cNode, cFunc, 1)
-                    U = utl.updateResources(U, u, cNode, cFunc)
-                    pcCost = pcCost + C[cNode, cFunc]
-                else:
-                    utl.hostFail(cNode, cFunc, rr, 'h')
-                    # else:
-                    # hostFail(cNode, cFunc, rr, 'u')
+            for ff in range(1 - 1, len(FPL) - 1):
+                cNode = CPL[ff]
+                for kk in range(1, len(CPL)):
+                    cFunc = FPL[kk]
+                    if (utl.canNodeProcess(U, u, cNode, cFunc)):
+                        # if (isHosted(cNode, cFunc, rr) == 0):
+                        utl.host(cNode, cFunc, rr, 1)
+                        utl.setxTable(cNode, cFunc, 1)
+                        U = utl.updateResources(U, u, cNode, cFunc)
+                        pcCost = pcCost + C[cNode, cFunc]
+                    else:
+                        utl.hostFail(cNode, cFunc, rr, 'h')
+                        # else:
+                        # hostFail(cNode, cFunc, rr, 'u')
 
     # * Routing cost * #
     for dd in range(1 - 1, len(D) - 1):
@@ -115,7 +116,7 @@ def BPCC(G, K, L, R, P, V, C, D, U, u, Sr, nAR, rho, o, f1, f2, f3, f4):
         GW=1
         for rr in range(1 - 1, r - 1):
             # length of the network elemeents
-            if(rr in utl.blockDetector(allocationTable,R)):
+            if(utl.checkList(utl.blockDetector(allocationTable, R), rr+1)):
 
                 CRC = 0
                 CRC = P[GW, D[dd]] + utl.blockingPenalty
@@ -191,7 +192,7 @@ def SPBA(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4):
         GW=1
         for rr in range(1-1,r-1):
         # length of the network elemeents
-            if ( checkList(utl.blockDetector(allocationTable, R), rr+1) ):
+            if ( utl.checkList(utl.blockDetector(allocationTable, R), rr+1) ):
                 CRC = 0
                 CRC = P[GW, D[dd]]+utl.blockingPenalty()
 
@@ -272,7 +273,7 @@ def CAGW(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4):
 
     for dd in range(1 - 1, len(D) - 1):
         for rr in range (1-1, rrr-1):
-            if (rr in utl.blockDetector(allocationTable, R)):
+            if (utl.checkList(utl.blockDetector(allocationTable, R), rr+1)):
                 CRC = 0
                 CRC = P[GW, D[dd]] + utl.blockingPenalty
 
@@ -303,7 +304,7 @@ def checkList( L , val):
     if ( val in LL ):
         return 1
     else:
-        return 0;
+        return 0
 
 
 

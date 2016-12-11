@@ -499,3 +499,17 @@ def blockingPenalty():
 
 
 # -- End of module 
+
+########################################################
+# Func    : checkList(L,val)
+# Decr    : Return 1 if val is in L, 0 otherwise.
+# Return  : 1 or 0.
+########################################################
+
+def checkList(L, val):
+    LL = L[0]
+
+    if (val in LL):
+        return 1
+    else:
+        return 0
