@@ -92,8 +92,8 @@ def monteCarloK(RUN,Sr,L,V,f1,f2,f3,f4,simType):
                 P     = utl.makeP(G)
                 
                 # Evalutate Each Algorithm with the above inputs 
-                costPPCC[i] = hrstc.PPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)
-                costSPBA[i] = hrstc.SPBA(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)
+                costPPCC[i] = hrstc.PPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)[0]
+                costSPBA[i] = hrstc.SPBA(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)[0]
                 costAGW[i]  = hrstc.AGW(P,D,R,rho)
                 
                 # Increase itter by one 
@@ -166,8 +166,8 @@ def monteCarloR(RUN,Sr,L,V,f1,f2,f3,f4,simType):
             for i in range(1,RUN): 
                 R     = utl.makeR(rr) 
                 # Evalutate Each Algorithm with the above inputs 
-                costPPCC[i] = hrstc.PPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)
-                costSPBA[i] = hrstc.SPBA(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)
+                costPPCC[i] = hrstc.PPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)[0]
+                costSPBA[i] = hrstc.SPBA(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)[0] 
                 costAGW[i]  = hrstc.AGW(P,D,R,rho)
                 AuxVec = AuxVec+1;
                 
