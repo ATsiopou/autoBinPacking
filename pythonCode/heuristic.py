@@ -11,6 +11,8 @@ def PPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4):
 
     d = utl.getPpccDestinationNode(D,rho)
     CR = np.zeros(L)    
+    
+    print "Allocation Table : ", allocationTable 
 
     # *Alllocation vector * #
     for rr in range (1-1, r):

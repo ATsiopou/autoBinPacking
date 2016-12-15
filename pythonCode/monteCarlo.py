@@ -22,8 +22,7 @@ def monteCarlo(simType,RUN,Sr,L,V,f1,f2,f3,f4):
         print "-"*20
         print "Monte Carlo simulation [R]" 
         print "-"*20
-        mPPCC,mSPBA,mAGW = monteCarloR(RUN,Sr,L,V,f1,f2,f3,f4,simType)        
-        mPPCC,mSPBA,mBPCC,mAGW,mCAGW
+        mPPCC,mSPBA,mBPCC,mAGW,mCAGW = monteCarloR(RUN,Sr,L,V,f1,f2,f3,f4,simType)        
         printAverageGains(mPPCC,mSPBA,mAGW,simType) 
 
     elif( simType == 'Rho' ):
@@ -31,7 +30,7 @@ def monteCarlo(simType,RUN,Sr,L,V,f1,f2,f3,f4):
         print "-"*20
         print"Monte Carlo simulation [Rho]"
         print "-"*20
-        mPPCC,mSPBA,mAGW = monteCarloRho(RUN,Sr,L,V,f1,f2,f3,f4,simType)
+        mPPCC,mSPBA,mBPCC,mAGW,mCAGW = monteCarloRho(RUN,Sr,L,V,f1,f2,f3,f4,simType)
         printAverageGains(mPPCC,mSPBA,mAGW,simType) 
     
     else:
