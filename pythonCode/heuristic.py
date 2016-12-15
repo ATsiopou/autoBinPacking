@@ -12,7 +12,7 @@ def PPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4):
     d = utl.getPpccDestinationNode(D,rho)
     CR = np.zeros(L)    
     
-    print "Allocation Table : ", allocationTable 
+
 
     # *Alllocation vector * #
     for rr in range (1-1, r):
@@ -24,13 +24,17 @@ def PPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4):
             CPL = np.sort(s)
             FPL = R[rr,:]
 
+            print "Length CPL : "
+
             for kk in range (0,len(CPL)):
                 cNode = CPL[kk]
                 for ff in range (1-1 ,len(FPL)):
                     cFunc = FPL[ff]
+                    print "Enter" ,utl.canNodeProcess(U, u, cNode, cFunc)
                     if ( utl.canNodeProcess(U, u, cNode, cFunc)):
                         #if (isHosted(cNode, cFunc, rr) == 0):
-                        utl.host(cNode, cFunc, rr, 1)
+
+                        allocationTable = utl.host(cNode, cFunc, rr, 1)
                         utl.setxTable(cNode, cFunc, 1)
                         U = utl.updateResources(U, u, cNode, cFunc)
                         pcCost = pcCost + C[cNode, cFunc]
@@ -47,7 +51,6 @@ def PPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4):
         GW=1
         for rr in range(1-1,r):
         # length of the network elemeents
-
             if ( utl.checkList(utl.blockDetector(allocationTable, R), rr+1) ):
                 CRC = 0
                 CRC = P[GW, D[dd]] + utl.blockingPenalty()
@@ -73,6 +76,9 @@ def PPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4):
 
     #print('Cost ppcc : #2.2f\n\n', pcCost)
     #utl.printSummary(R,K,L,D,allocationTable)
+    
+ #   print "allocation table after" , allocationTable
+    
     return cost, blockingProbability
 
 

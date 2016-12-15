@@ -431,6 +431,7 @@ def isHosted(node,func,request):
 ########################################################
 def host(node,func,request,b):
     allocationTable[node,func,request] = b
+    return allocationTable
 ########################################################
 # Func    : setxTable()
 # Decr    : Set the bit in the x vector map/table to 1.

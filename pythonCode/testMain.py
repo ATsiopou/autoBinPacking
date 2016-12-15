@@ -6,6 +6,7 @@ import dijkstra as dkstra
 import hrUtils as utl 
 import objUtils as ob 
 import monteCarlo as mc 
+import heuristic as hr 
 # ADDME
 # Description: This is the main driver program. The
 #              The program is designed to solve the
@@ -126,7 +127,8 @@ print utl.makeR(5)
 # C 
 print
 print "[( Testing )  C ]"
-print utl.makeC(K,L) 
+C = utl.makeC(K,L) 
+print C
 # U/u
 print 
 print "[( Testing ) makeU  ]" 
@@ -169,21 +171,46 @@ print
 print "\t\t[( Testing ) case 1 : PPCC / STATICPPCC / SPBL (NAIVE)  ]" 
 print "\t\t","="*eqlSymLength, "\tK\t", "="*eqlSymLength
 
-print mc.monteCarlo('K',10,Sr,L,V,f1,f2,f3,f4) 
+#print mc.monteCarlo('K',10,Sr,L,V,f1,f2,f3,f4) 
 print 
+
+
+# -  Monte carlo R  - #
+print 
+print "\t\t[( Testing ) CASE : TESTING STATIC GRAPH)   ]" 
+print "\t\t","="*eqlSymLength, "\tR\t", "="*eqlSymLength
+print 
+print "G: \n\n" , G 
+print "K: \n\n" , K 
+print "L: \n\n" , L
+print "R: \n\n" , R
+print "P: \n\n" , P 
+print "V: \n\n" , V 
+print "C: \n\n" , C
+print "D: \n\n" , D 
+print "U: \n\n" , U 
+print "u: \n\n" , u
+print "Sr: \n\n" , Sr 
+print "nAR: \n\n" , nAR
+print "rho: \n\n" , utl.makeRho(D,r0)    
+print "o: \n\n" , o  
+
+hr.PPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,utl.makeRho(D,r0),o,f1,f2,f3,f4)  
+
+
+
 # -  Monte carlo R  - #
 print 
 print "\t\t[( Testing ) case 2 : PPCC / STATICPPCC / SPBL (NAIVE)   ]" 
 print "\t\t","="*eqlSymLength, "\tR\t", "="*eqlSymLength
 print 
 
+
 # -  MonteCarlo Rho   - #
 print 
 print "\t\t[( Testing ) case 3 : PPCC / STATICPPCC / SPBL (NAIVE)  ]" 
 print "\t\t","="*eqlSymLength, "\tRho\t", "="*eqlSymLength
 print 
-
-
 
 print "="*eqlSymLength," [(END) : monteCarlo.py  ]", "="*eqlSymLength
 

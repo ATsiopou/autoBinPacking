@@ -95,10 +95,7 @@ def monteCarloK(RUN,Sr,L,V,f1,f2,f3,f4,simType):
             P     = utl.makeP(G)
                 
             print "Iteration : " , i 
-            print "nAR : ", nAR  
-            #print "G   : ", G 
-            
-            
+
             # Evalutate Each Algorithm with the above inputs 
             cost1,block1 = hrstc.PPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)
             cost2,block2 = hrstc.SPBA(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)
@@ -197,8 +194,6 @@ def monteCarloR(RUN,Sr,L,V,f1,f2,f3,f4,simType):
             for i in range(0,RUN): 
                 R     = utl.makeR(rr) 
                 # Evalutate Each Algorithm with the above inputs 
-
-                            # Evalutate Each Algorithm with the above inputs 
                 cost1,block1 = hrstc.PPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)
                 cost2,block2 = hrstc.SPBA(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)
                 cost3,block3 = hrstc.BPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)
