@@ -60,6 +60,10 @@ def monteCarloK(RUN,Sr,L,V,f1,f2,f3,f4,simType):
     costBPCC = np.zeros((RUN), dtype=np.int) 
     costAGW  = np.zeros((RUN), dtype=np.int)
     costCAGW = np.zeros((RUN), dtype=np.int)
+    blockPPCC = np.zeros((RUN), dtype=np.int) 
+    blockSPBA = np.zeros((RUN), dtype=np.int)
+    blockBPCC = np.zeros((RUN), dtype=np.int) 
+    blockCAGW = np.zeros((RUN), dtype=np.int)
 
     # Init the mean vectors 
     mPPCC = np.zeros((RUN), dtype=np.int) 
@@ -77,10 +81,9 @@ def monteCarloK(RUN,Sr,L,V,f1,f2,f3,f4,simType):
     # Start the main iteration loop 
     for kk in range(K_START,K_END):
         K = kk
-        #AuxVec=1
         
         #while( AuxVec <= RUN ):
-        for i in range(0,RUN-1):
+        for i in range(0,RUN):
             # Generate the inputs for the iteration 
             R     = utl.makeR(NUMBER_REQUESTS)
             U,u   = utl.makeU(K)
@@ -94,31 +97,41 @@ def monteCarloK(RUN,Sr,L,V,f1,f2,f3,f4,simType):
                 
             print "Iteration : " , i 
             print "nAR : ", nAR  
-            
-            print "G   : ", G 
+            #print "G   : ", G 
             
             
             # Evalutate Each Algorithm with the above inputs 
-            costPPCC[i] = hrstc.PPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)[0]            
-            costSPBA[i] = hrstc.SPBA(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)[0]
-            costBPCC[i] = hrstc.BPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)[0]
-            costCAGW[i]  = hrstc.CAGW(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)[0]                
-            costAGW[i]  = hrstc.AGW(P,D,R,rho)
-            # Increase itter by one 
-            #AuxVec = AuxVec+1
-            #if (AuxVec == RUN): 
-             #   break
-            #else:
-            #    AuxVec = AuxVec+1
-            #    break
-                # end For 
-            #end While 
+            cost1,block1 = hrstc.PPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)
+            cost2,block2 = hrstc.SPBA(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)
+            cost3,block3 = hrstc.BPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)
+            cost4,block4 = hrstc.CAGW(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)
+            cost5 = hrstc.AGW(P,D,R,rho)
+            
+            if(cost1 == 0 or cost2 == 0 or cost3 == 0 or cost4 == 0 or cost5 == 0 ):  
+                i = i-1
+            else : 
+                costPPCC[i] = cost1 
+                costSPBA[i] = cost2
+                costBPCC[i] = cost3 
+                costCAGW[i] = cost4
+                costAGW[i]  = cost5
+           
+                blockPPCC[i] = block1 
+                blockSPBA[i] = block2
+                blockBPCC[i] = block3 
+                blockCAGW[i] = block4
+
         print "costPPCC : " , costPPCC
         print "costSPBA : " , costSPBA
         print "costBPCC : " , costBPCC
         print "costCAGW : ", costCAGW 
         print "costAGW  : ", costAGW 
-         
+        
+        print "blockPPCC :" , blockPPCC
+        print "blockSPBA :" , blockSPBA
+        print "blockBPCC :" , blockBPCC
+        print "blockCAGW :" , blockCAGW
+        
         mPPCC[counter]= np.mean(costPPCC)
         mSPBA[counter]= np.mean(costSPBA)
         mBPCC[counter]= np.mean(costBPCC)
@@ -147,15 +160,19 @@ def monteCarloK(RUN,Sr,L,V,f1,f2,f3,f4,simType):
 ###########################################################    
 def monteCarloR(RUN,Sr,L,V,f1,f2,f3,f4,simType): 
         
-    # Create size/mem the matricies requires 
+    # Init the vectors of size 1xRUN 
     costPPCC = np.zeros((RUN), dtype=np.int)
     costSPBA = np.zeros((RUN), dtype=np.int) 
+    costBPCC = np.zeros((RUN), dtype=np.int) 
     costAGW  = np.zeros((RUN), dtype=np.int)
+    costCAGW = np.zeros((RUN), dtype=np.int)
 
     # Init the mean vectors 
     mPPCC = np.zeros((RUN), dtype=np.int) 
     mSPBA = np.zeros((RUN), dtype=np.int)
+    mBPCC = np.zeros((RUN), dtype=np.int)
     mAGW  = np.zeros((RUN), dtype=np.int)
+    mCAGW = np.zeros((RUN), dtype=np.int)
 
     # Define/init local vars 
     K     = 20
@@ -178,23 +195,28 @@ def monteCarloR(RUN,Sr,L,V,f1,f2,f3,f4,simType):
     for rr in range(R_START,R_END):
         AuxVec=1;
         while (AuxVec <= RUN ):
-            for i in range(1,RUN): 
+            for i in range(0,RUN): 
                 R     = utl.makeR(rr) 
                 # Evalutate Each Algorithm with the above inputs 
-                costPPCC[i] = hrstc.PPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)[0]
-                costSPBA[i] = hrstc.SPBA(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)[0] 
-                costAGW[i]  = hrstc.AGW(P,D,R,rho)
+
+                            # Evalutate Each Algorithm with the above inputs 
+                cost1,block1 = hrstc.PPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)
+                cost2,block2 = hrstc.SPBA(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)
+                cost3,block3 = hrstc.BPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)
+                cost4,block4 = hrstc.CAGW(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)
+                cost5 = hrstc.AGW(P,D,R,rho)
                 AuxVec = AuxVec+1;
                 
         # Calc mean and add as single element of resp. vector. 
         mPPCC[counter]= np.mean(costPPCC)
-        mSPBA[counter]= np.mean(costSPBA) 
+        mSPBA[counter]= np.mean(costSPBA)
+        mBPCC[counter]= np.mean(costBPCC)
+        mCAGW[counter] = np.mean(costCAGW)
         mAGW[counter] = np.mean(costAGW)
-            
+    
         #printRound(K,rr,rho,mPPCC(counter),mNaive(counter),msPPCC(counter),mcSimulation);
         counter = counter +1;          
-        
-    return mPPCC,mSPBA,mAGW 
+    return mPPCC,mSPBA,mBPCC,mAGW,mCAGW
 
 
 ###########################################################
@@ -210,16 +232,19 @@ def monteCarloR(RUN,Sr,L,V,f1,f2,f3,f4,simType):
 #  mNaive :: monte c naive avrg sol vector for each R
 ###########################################################    
 def monteCarloRho(RUN,Sr,L,V,f1,f2,f3,f4,simType):         
-    # Create size/mem the matricies requires 
+    # Init the vectors of size 1xRUN 
     costPPCC = np.zeros((RUN), dtype=np.int)
     costSPBA = np.zeros((RUN), dtype=np.int) 
+    costBPCC = np.zeros((RUN), dtype=np.int) 
     costAGW  = np.zeros((RUN), dtype=np.int)
+    costCAGW = np.zeros((RUN), dtype=np.int)
 
     # Init the mean vectors 
     mPPCC = np.zeros((RUN), dtype=np.int) 
     mSPBA = np.zeros((RUN), dtype=np.int)
+    mBPCC = np.zeros((RUN), dtype=np.int)
     mAGW  = np.zeros((RUN), dtype=np.int)
-
+    mCAGW = np.zeros((RUN), dtype=np.int)
 
     # Define/init local vars 
     K     = 20
@@ -243,30 +268,30 @@ def monteCarloRho(RUN,Sr,L,V,f1,f2,f3,f4,simType):
     rr = Rho_START
         
     while( rr <= Rho_END ):
-        AuxVec = 1 
-        while (AuxVec <= RUN ):
-            for i in range(1,RUN):
-                rho   = utl.makeRho(D,1)
-                # Evalutate Each Algorithm with the above inputs 
-                costPPCC[i] = hrstc.PPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)
-                costSPBA[i] = hrstc.SPBA(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)
-                costAGW[i]  = hrstc.AGW(P,D,R,rho)
-                AuxVec = AuxVec+1;
-            # end for       
-        #end 2 while 
-
-        # Calc mean and add as single element of resp. vector. 
-        # Calc mean and add as single element of resp. vector. 
+        #AuxVec = 1 
+        #while (AuxVec <= RUN ):
+        for i in range(1,RUN):
+            rho   = utl.makeRho(D,1)
+            # Evalutate Each Algorithm with the above inputs 
+            cost1,block1 = hrstc.PPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)
+            cost2,block2 = hrstc.SPBA(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)
+            cost3,block3 = hrstc.BPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)
+            cost4,block4 = hrstc.CAGW(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4)
+            cost5 = hrstc.AGW(P,D,R,rho)
+            #AuxVec = AuxVec+1;
+            
+            # Calc mean and add as single element of resp. vector. 
         mPPCC[counter]= np.mean(costPPCC)
-        mSPBA[counter]= np.mean(costSPBA) 
+        mSPBA[counter]= np.mean(costSPBA)
+        mBPCC[counter]= np.mean(costBPCC)
+        mCAGW[counter] = np.mean(costCAGW)
         mAGW[counter] = np.mean(costAGW)
         #printRound(K,NUMBER_REQUESTS,rr,mPPCC(counter),mNaive(counter),msPPCC(counter),mcSimulation);
         counter = counter +1;          
-    
+        
         rr = rr + 10; 
-    # End 1 while 
-    return mPPCC,mSPBA,mAGW 
-
+        # End 1 while 
+    return mPPCC,mSPBA,mBPCC,mAGW,mCAGW
 ###########################################################
 # DESCR
 #         prints the average gains of monte carlo type 
