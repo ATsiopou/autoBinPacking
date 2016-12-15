@@ -54,7 +54,7 @@ def makeR(numReq):
     R = np.empty((0,vecSize), int)    
     # Iterate over the number of requests , adding each one to the top 
     for r in xrange(numReq):
-        row = rndm.sample(range(minInt, maxInt), vecSize)
+        row = rndm.sample(range(minInt, maxInt+1), vecSize)
         R   = np.row_stack((R, row))
     return R  
 ######################################################### 
@@ -111,8 +111,8 @@ def makeU(K):
     valU = np.array([[2000],[30]])    
     # Here we make u. 
     # first identify the rows of u 
-    valu1 = [40 , 10 , 20 ,30] 
-    valu2 = [ 1 , 1 , .5 , .5 ]  
+    valu1 = [40 , 10 , 20 ,30, 50] 
+    valu2 = [ 1 , 1 , .5 , .5, 1 ]  
     # stack  u together 
     u = np.vstack([valu1,valu2])
     # U should be returned as a 2xK matrix 
@@ -288,10 +288,6 @@ def printSummary(R,K,L,D,allocationTable):
             #val = fAllocationTable(rNode,rFunc,rIndex) 
             print "\t",rIndex,"\t\t",f,"\t\t",rFunc,"\t\t",rNode
             
-        
-        
-        
-
 ##########################################################
 # Func    : getNodeFromFunc() 
 # Decr    : Return the node for function f was mapped
@@ -331,7 +327,7 @@ def getPpccDestinationNode(D,rho):
     node = 1
     count = 1
     
-    for i in range(1-1, len(rho)-1):
+    for i in range(1-1, len(rho)):
         if(maxx == rho[i]):
             node = D[i]
         count = count + 1
@@ -362,23 +358,37 @@ def getPath(G,source,dest):
 #   path  :: The path, in terms of its elem. nodes.
 ########################################################
 def getStartNode(G,Sr,d):
-    # Choose some (relatively large) min. value to start.
-    minVal = 100; 
-    pathCost = np.zeros(Sr.shape)
-    start = int(Sr[0])
-    end = len(Sr)-1 
-
-    for ii in range(0, end):
+    # Choose some (relatively large) min. value to start
+    pathCost = np.zeros(len(Sr))
+    
+    for ii in range(int(Sr[0])-1, len(Sr)):
         cst,path = getPath(G,ii,d)
         pathCost[ii] = cst
+        
 
-        if ( cst <= minVal ):
-            minVal = cst
-            startingNode= path
-        # Reset the cost and paths
-        path = 0
-        cst  = 0
+    if ( all(pathCost == 0) ): 
+        startingNode = 0
+    else:
+        
+        minList = [ val for idx, val in enumerate(pathCost)  ] 
+        minVal = min_gt(minList,0)
+
+        count = 0 
+        indx = 0 
+        for i in range(0,len(minList) ): 
+            if( minVal == pathCost[i]): 
+                indx = count
+                break 
+            count = count + 1; 
+        startingNode = Sr[indx]  
+    
     return startingNode
+
+#Def : Function to return in value greater than 
+#       some specified value : val 
+def min_gt(seq, val):
+    return min(v for v in seq if v > val)
+
 
 ########################################################
 # Func    : getPath()
@@ -475,7 +485,9 @@ def updateResources(U,u,node,func):
 def canNodeProcess(U,u,node,func):
     #print "U: ",  U 
     #print "u: ",  u 
-    
+    #print "Node: ", node 
+    #print "Func", func 
+
     if( (u[0,func] <= U[0,node]) and (u[1,func] <= U[1,node]) ):
         b = 1
     else:
@@ -490,7 +502,7 @@ def canNodeProcess(U,u,node,func):
 def getNode(K, func, req, allocationTable):
     node = 1
     counter = 1
-    for kInd in range(1-1, K-1):
+    for kInd in range(1-1, K):
         if ( allocationTable[kInd, func, req] == 1):
             node = counter
             
@@ -504,13 +516,14 @@ def getNode(K, func, req, allocationTable):
 ########################################################
 def blockDetector (allocationTable, R):
 
-    rows, cols =R.shape
+    rows, cols = R.shape
     count = 0
-    blockedRequest = np.zeros((rows))
+    blockedRequest = np.zeros(rows)
     
-    for rr in range(1-1, rows-1):
-        for ff in range(1-1,cols-1):
-            if(np.all(allocationTable[:,R[rr,ff],rr] == 0)):
+    for rr in range(1-1, rows):
+        for ff in range(1-1,cols):
+            #print "R[",rr,",",ff,"]= ", R[rr,ff] 
+            if(np.all(allocationTable[:,R[rr,ff]-1,rr] == 0)):
                 blockedRequest[count]=rr+1
                 count = count + 1
                 break

@@ -10,20 +10,21 @@ def PPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4):
     fAllocationTable,allocationTable,xTable,pcCost,RU,x,r,c = utl.init(R,K,L,U,f1)
 
     d = utl.getPpccDestinationNode(D,rho)
-    CR = np.zeros((1,L))    
-    
+    CR = np.zeros(L)    
+
     # *Alllocation vector * #
-    for rr in range (1-1, r-1):
+    for rr in range (1-1, r):
         s = utl.getStartNode(G, Sr, d)
+       # print "s: ", s 
         sNodes = utl.getCandidatePath(G, s, d)
         if (sNodes != 0):
-            sNodes = sNodes[1:len(sNodes)-1]
+            #sNodes = sNodes[1:len(sNodes)-1]
             CPL = np.sort(s)
             FPL = R[rr,:]
 
-            for kk in range (1,len(CPL)):
+            for kk in range (0,len(CPL)):
                 cNode = CPL[kk]
-                for ff in range (1-1 ,len(FPL)-1):
+                for ff in range (1-1 ,len(FPL)):
                     cFunc = FPL[ff]
                     if ( utl.canNodeProcess(U, u, cNode, cFunc)):
                         #if (isHosted(cNode, cFunc, rr) == 0):
@@ -37,12 +38,12 @@ def PPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4):
                         #hostFail(cNode, cFunc, rr, 'u')
     
     # * Routing cost * #
-    for dd in range (1-1, len(D)-1):
+    for dd in range (1-1, len(D)-1): # reduction to to choosing o 
 
         s = utl.getStartNode(G, Sr, dd)
         # Define the GateWay
         GW=1
-        for rr in range(1-1,r-1):
+        for rr in range(1-1,r):
         # length of the network elemeents
 
             if ( utl.checkList(utl.blockDetector(allocationTable, R), rr+1) ):
@@ -52,13 +53,12 @@ def PPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4):
             else:
                 Lr = len(R[rr,:])
                 I = R[rr,:]
-                for l in range (1-1,(Lr - 1)-1):
+                for l in range (1-1,Lr):
                     n1 = utl.getNode(K, I[l], rr, allocationTable)
                     n2 = utl.getNode(K, I[l + 1], rr, allocationTable)
                     CR = CR + P[n1, n2]
                     CRC = 0
-                    CRC = CRC + P(utl.getNode(K, Lr, rr, allocationTable), D[dd])
-
+                    CRC = CRC + P[utl.getNode(K, Lr, rr, allocationTable), D[dd]]
                     pcCost = pcCost + rho[dd] * CRC
 
     cost = pcCost
@@ -70,7 +70,7 @@ def PPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4):
     blockingProbability = float(numberOfblockedRequest)/float(rows)
 
     #print('Cost ppcc : #2.2f\n\n', pcCost)
-    utl.printSummary(R,K,L,D,allocationTable)
+    #utl.printSummary(R,K,L,D,allocationTable)
     return cost, blockingProbability
 
 
@@ -82,20 +82,21 @@ def BPCC(G, K, L, R, P, V, C, D, U, u, Sr, nAR, rho, o, f1, f2, f3, f4):
     fAllocationTable, allocationTable, xTable, pcCost, RU, x, r, c = utl.init(R, K, L, U, f1)
 
     d = utl.getPpccDestinationNode(D, rho)
-    CR = np.zeros((1, L))
+    CR = np.zeros(L)
 
     # *Alllocation vector * #
-    for rr in range(1 - 1, r - 1):
+    for rr in range(1 - 1, r ):
         s = utl.getStartNode(G, Sr, d)
         sNodes = utl.getCandidatePath(G, s, d)
         if (sNodes != 0):
-            sNodes = sNodes[1:len(sNodes) - 1]
+            #sNodes = sNodes[1:len(sNodes) - 1]
             CPL = np.sort(s)
             FPL = R[rr, :]
 
-            for ff in range(1 - 1, len(FPL) - 1):
+            for ff in range(1 - 1, len(FPL)):
+
                 cNode = CPL[ff]
-                for kk in range(1, len(CPL)):
+                for kk in range(0, len(CPL)):
                     cFunc = FPL[kk]
                     if (utl.canNodeProcess(U, u, cNode, cFunc)):
                         # if (isHosted(cNode, cFunc, rr) == 0):
@@ -109,12 +110,12 @@ def BPCC(G, K, L, R, P, V, C, D, U, u, Sr, nAR, rho, o, f1, f2, f3, f4):
                         # hostFail(cNode, cFunc, rr, 'u')
 
     # * Routing cost * #
-    for dd in range(1 - 1, len(D) - 1):
+    for dd in range(1 - 1, len(D)-1):
 
         s = utl.getStartNode(G, Sr, dd)
         # Define the GateWay
         GW=1
-        for rr in range(1 - 1, r - 1):
+        for rr in range(1 - 1, r):
             # length of the network elemeents
             if(utl.checkList(utl.blockDetector(allocationTable, R), rr+1)):
 
@@ -125,7 +126,7 @@ def BPCC(G, K, L, R, P, V, C, D, U, u, Sr, nAR, rho, o, f1, f2, f3, f4):
             else:
                 Lr = len(R[rr, :])
                 I = R[rr, :]
-                for l in range(1 - 1, (Lr - 1) - 1):
+                for l in range(1 - 1, Lr):
                     n1 = utl.getNode(K, I[l], rr, allocationTable)
                     n2 = utl.getNode(K, I[l + 1], rr, allocationTable)
                     CR = CR + P[n1, n2]
@@ -160,18 +161,18 @@ def SPBA(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4):
    # CR = np.zeros((1,len(L)))
    
     # *Alllocation vector * #
-    for rr in range (1-1, r-1):
+    for rr in range (1-1, r):
         s = utl.getStartNode(G, Sr, d)
         sNodes = utl.getCandidatePath(G, s, d)
 
         if (sNodes != 0):
-            sNodes = sNodes[1:len(sNodes) - 1]#  # ok<*NASGU>
+           # sNodes = sNodes[1:len(sNodes) - 1]#  # ok<*NASGU>
             CPL = np.sort(s)
             FPL = R[rr,:]
 
             for kk in range (1,len(CPL)):
                 cNode = CPL[kk]
-                for ff in range (1-1 ,len(FPL)-1):
+                for ff in range (1-1 ,len(FPL)):
                     cFunc = FPL[ff]
                     if (utl.canNodeProcess(U, u, cNode, cFunc)):
                     #if (isHosted(cNode, cFunc, rr) == 0):
@@ -190,7 +191,7 @@ def SPBA(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4):
         s = utl.getStartNode(G, Sr, dd)
         # Define the GateWay
         GW=1
-        for rr in range(1-1,r-1):
+        for rr in range(1-1,r):
         # length of the network elemeents
             if ( utl.checkList(utl.blockDetector(allocationTable, R), rr+1) ):
                 CRC = 0
@@ -200,7 +201,7 @@ def SPBA(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4):
             else:
                 Lr = len(R[rr,:])
                 I = R[rr,:]
-                for l in range (1-1,(Lr - 1)-1):
+                for l in range (1-1,Lr):
                     n1 = utl.getNode(K, I[l], rr, allocationTable)
                     n2 = utl.getNode(K, I[l + 1], rr, allocationTable)
                     CR = CR + P(n1, n2)
@@ -234,7 +235,7 @@ def AGW(P,D,R,rho):
     sumCost = 0
     rrr, c = R.shape
 
-    for rr in range (1-1, rrr-1):
+    for rr in range (1-1, rrr):
         for dd in range (1-1, len(D)-1):
 
             sumCost = sumCost + rho[dd] * P[GW, D[dd]]
@@ -254,10 +255,10 @@ def CAGW(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4):
     # Get the first destination
     # d1 = getDestinaion(D, rho)
     # pathCost1 = P(GW, d1);
-    for rr in range (1-1, r-1):
+    for rr in range (1-1, r):
         FPL = R[rr,:]
         cNode = GW
-        for ff in range (1-1 ,len(FPL)-1):
+        for ff in range (1-1 ,len(FPL)):
             cFunc = FPL[ff] - 1
             if (utl.canNodeProcess(U, u, cNode, cFunc)):
                 #if (isHosted(cNode, cFunc, rr) == 0):
@@ -272,7 +273,7 @@ def CAGW(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4):
     rrr, c = R.shape
 
     for dd in range(1 - 1, len(D) - 1):
-        for rr in range (1-1, rrr-1):
+        for rr in range (1-1, rrr):
             if (utl.checkList(utl.blockDetector(allocationTable, R), rr+1)):
                 CRC = 0
                 CRC = P[GW, D[dd]] + utl.blockingPenalty()

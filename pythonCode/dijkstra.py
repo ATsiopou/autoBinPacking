@@ -291,7 +291,7 @@ def createLayer(case,G,K,nAR):
             #G[0:n-nAR:,nAR+1:] = tmp
         G[0:n-nAR:,n-nAR:] = tmp 
         
-        print G 
+        #print G 
         # END CASE 3 
     return 0              
 ##########################################################
