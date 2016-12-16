@@ -275,18 +275,17 @@ def printSummary(R,K,L,D,allocationTable):
     #fprintf('Request Matrix: \n\n')
     #fprintf( [ repmat('\t%d   ',1,size(R,2)) '\n'], R')
     print " " 
-    print " " 
-    
+    print " "     
     print "----------------------------------------------------------------"
     print "|     Request     |    Order    |   Function  |   Mapped node   |"
     print "----------------------------------------------------------------"
-    for rIndex in range(0,row-1):
+    for rIndex in range(0,row):
         reqi = R[rIndex,:]
         for f in range(0,col):
-            rNode = getNodeFromFunc(reqi[f],rIndex,numNodes,allocationTable)
+            rNode = getNodeFromFunc(reqi[f],rIndex+1,numNodes,allocationTable)
             rFunc = reqi[f]
             #val = fAllocationTable(rNode,rFunc,rIndex) 
-            print "\t",rIndex,"\t\t",f,"\t\t",rFunc,"\t\t",rNode
+            print "\t",rIndex+1,"\t\t",f+1,"\t\t",rFunc,"\t\t",rNode
             
 ##########################################################
 # Func    : getNodeFromFunc() 
@@ -297,7 +296,7 @@ def getNodeFromFunc(func,req,K,allocationTable):
     node  = 1
     counter = 1
     for kInd in range(0,K):
-        if( allocationTable[kInd,func,req] == 1 ):
+        if( allocationTable[kInd,func-1,req-1] == 1 ):
             node = counter
         counter = counter + 1
     return node
@@ -324,14 +323,32 @@ def getStaticDestinationNode(o):
 def getPpccDestinationNode(D,rho):
     # find the max val
     maxx = np.max(rho)
-    node = 1
-    count = 1
-    
     for i in range(1-1, len(rho)):
         if(maxx == rho[i]):
             node = D[i]
-        count = count + 1
+        #count = count + 1
     return node
+
+########################################################
+# Func    : getPpccDestinationNode()
+# Decr    : Given the destination set D, the prob.
+#           vector rho,clc. the corresponding
+#           destination node.
+# Return  :
+#   node :: Node corresponding to max rho index in set D
+########################################################
+def getPpccDestinationNodeTest(D,rho):
+    #
+    node = 1
+    
+    maxVal = max(rho)
+    print "maxVal" , maxVal 
+    for i in range(0,len(rho)): 
+        if( maxVal == rho[i]): 
+            node = D[i] 
+    return node 
+
+
 ########################################################
 # Func    : getPath()
 # Decr    : Calculate the shortest path.
@@ -358,20 +375,18 @@ def getPath(G,source,dest):
 #   path  :: The path, in terms of its elem. nodes.
 ########################################################
 def getStartNode(G,Sr,d):
-    # Choose some (relatively large) min. value to start
+    
     pathCost = np.zeros(len(Sr))
     
     for ii in range(int(Sr[0])-1, len(Sr)):
-        cst,path = getPath(G,ii,d)
+        cst,path = getPath(G,int(Sr[ii]),int(d))
         pathCost[ii] = cst
-        
 
     if ( all(pathCost == 0) ): 
         startingNode = 0
     else:
-        
         minList = [ val for idx, val in enumerate(pathCost)  ] 
-        minVal = min_gt(minList,0)
+        minVal = minGt(minList,0)
 
         count = 0 
         indx = 0 
@@ -384,12 +399,20 @@ def getStartNode(G,Sr,d):
     
     return startingNode
 
-#Def : Function to return in value greater than 
-#       some specified value : val 
-def min_gt(seq, val):
+########################################################
+# Func     : getStarting Node
+# Def      : Function to return in value greater than 
+#            some specified value : val 
+########################################################
+def minGt(seq, val):
     return min(v for v in seq if v > val)
-
-
+########################################################
+# Func     : getStarting Node
+# Def      : Function to return in value greater than 
+#            some specified value : val 
+########################################################
+def maxGt(seq, val):
+    return max(v for v in seq if v > val)
 ########################################################
 # Func    : getPath()
 # Decr    : wrapper function for getPath()
@@ -398,7 +421,7 @@ def min_gt(seq, val):
 #      d :: destination
 ########################################################
 def getCandidatePath(G,s,d):
-    cost, sNodes = getPath(G,s,d)
+    cost, sNodes = getPath(G,int(s),int(d))
     return sNodes
 ########################################################
 # Func    : isHosted()
@@ -413,7 +436,7 @@ def getCandidatePath(G,s,d):
 #      b :: Bool, tf true:yes, false:no.
 ########################################################
 def isHosted(node,func,request):
-    if( allocationTable[node,func,request]):
+    if( allocationTable[node-1,func-1,request-1]):
         b = 1
     else:
         b = 0
@@ -430,7 +453,7 @@ def isHosted(node,func,request):
 #     b  :: bit, 1/0
 ########################################################
 def host(node,func,request,b):
-    allocationTable[node,func,request] = b
+    allocationTable[node-1,func-1,request-1] = b
     return allocationTable
 ########################################################
 # Func    : setxTable()
@@ -443,7 +466,7 @@ def host(node,func,request,b):
 #    b   :: either bit to set 1/0
 ########################################################
 def setxTable(node,func,b):
-    xTable[node,func] = b
+    xTable[node-1,func-1] = b
 ########################################################
 # Func    : mapTicker
 # Decr    : Records the mapping, and failurs
@@ -456,7 +479,7 @@ def setxTable(node,func,b):
 #      h :: indicates function isHosted at node k
 ########################################################
 def hostFail(node,func,request,b):
-    fAllocationTable[node,func,request] = b
+    fAllocationTable[node-1,func-1,request-1] = b
 ########################################################
 # Func    : updateResources()
 # Decr    : Update the resource vector U by decreasing
@@ -468,8 +491,8 @@ def hostFail(node,func,request,b):
 #    u   :: function requirement
 ########################################################
 def updateResources(U,u,node,func):
-    U[0,node] = U[0,node]-u[0,func]
-    U[1,node] = U[1,node]-u[1,func]
+    U[0,node-1] = U[0,node-1]-u[0,func-1]
+    U[1,node-1] = U[1,node-1]-u[1,func-1]
     return U
 ########################################################
 # Func    : canNodeProcess()
@@ -484,12 +507,7 @@ def updateResources(U,u,node,func):
 # Return  : true: yes / false:no
 ########################################################
 def canNodeProcess(U,u,node,func):
-    #print "U: ",  U 
-    #print "u: ",  u 
-    #print "Node: ", node 
-    #print "Func", func 
-
-    if( (u[0,func] <= U[0,node]) and (u[1,func] <= U[1,node]) ):
+    if( (u[0,func-1] <= U[0,node-1]) and (u[1,func-1] <= U[1,node-1]) ):
         b = 1
     else:
         b = 0
@@ -504,7 +522,7 @@ def getNode(K, func, req, allocationTable):
     node = 1
     counter = 1
     for kInd in range(1-1, K):
-        if ( allocationTable[kInd, func, req] == 1):
+        if ( allocationTable[kInd, func-1, req-1] == 1):
             node = counter
             
         counter = counter + 1
@@ -515,7 +533,7 @@ def getNode(K, func, req, allocationTable):
 #           and request Matrix R.
 # Return  : blocked Request r
 ########################################################
-def blockDetector (allocationTable, R):
+def blockDetector(allocationTable, R):
 
     rows, cols = R.shape
     count = 0
@@ -528,7 +546,6 @@ def blockDetector (allocationTable, R):
                 blockedRequest[count]=rr+1
                 count = count + 1
                 break
-
     return blockedRequest, count
 ########################################################
 # Func    : blockingPenalty()

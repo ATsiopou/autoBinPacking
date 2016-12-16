@@ -68,7 +68,8 @@ print
 print "[( Testing ) imported files ]" 
 print "" 
 print "[( Testing ) shortestPath(G,1,2) ]" 
-print dkstra.shortestPath(G,'1','2')
+print dkstra.shortestPath(G,'4','1')
+print dkstra.shortestPath(G,4,1)
 # shortest path 
 print 
 print "[( Testing ) shortestPathMatrix(G) ]" 
@@ -91,7 +92,7 @@ print graph
 # Shortest path
 print 
 print "[( Testing ) shortestPathMatrix( genGraph(4,3)) ]" 
-P = dkstra.shortestPathMatrix(graph) 
+#P = dkstra.shortestPathMatrix(graph) 
 print P 
 print 
 print "="*eqlSymLength , " [(END) : dijkstra.py  ]", "="*eqlSymLength
@@ -170,32 +171,31 @@ print "="*eqlSymLength, " [(START) : monteCarlo.py  ]", "="*eqlSymLength
 print
 print "\t\t[( Testing ) case 1 : PPCC / STATICPPCC / SPBL (NAIVE)  ]" 
 print "\t\t","="*eqlSymLength, "\tK\t", "="*eqlSymLength
-
-#print mc.monteCarlo('K',10,Sr,L,V,f1,f2,f3,f4) 
+print mc.monteCarlo('K',10,Sr,L,V,f1,f2,f3,f4) 
 print 
 
 
-# -  Monte carlo R  - #
-print 
-print "\t\t[( Testing ) CASE : TESTING STATIC GRAPH)   ]" 
-print "\t\t","="*eqlSymLength, "\tR\t", "="*eqlSymLength
-print 
-print "G: \n\n" , G 
-print "K: \n\n" , K 
-print "L: \n\n" , L
-print "R: \n\n" , R
-print "P: \n\n" , P 
-print "V: \n\n" , V 
-print "C: \n\n" , C
-print "D: \n\n" , D 
-print "U: \n\n" , U 
-print "u: \n\n" , u
-print "Sr: \n\n" , Sr 
-print "nAR: \n\n" , nAR
-print "rho: \n\n" , utl.makeRho(D,r0)    
-print "o: \n\n" , o  
-
-hr.PPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,utl.makeRho(D,r0),o,f1,f2,f3,f4)  
+# -  STTIIC TEST  - #
+#print 
+#print "\t\t[( Testing ) CASE : TESTING STATIC GRAPH)   ]" 
+#print "\t\t","="*eqlSymLength, "\tR\t", "="*eqlSymLength
+#print 
+#print "G: \n\n" , G 
+#print "K: \n\n" , K 
+#print "L: \n\n" , L
+#print "R: \n\n" , R
+#print "P: \n\n" , P 
+#print "V: \n\n" , V 
+#print "C: \n\n" , C
+#print "D: \n\n" , D 
+#print "U: \n\n" , U 
+#print "u: \n\n" , u
+#print "Sr: \n\n" , Sr 
+#print "nAR: \n\n" , nAR
+#print "rho: \n\n" , ro
+#print "o: \n\n" , o  
+#print dkstra.printGraph(G) 
+#print hr.PPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,ro,o,f1,f2,f3,f4)  
 
 
 

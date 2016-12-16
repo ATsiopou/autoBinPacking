@@ -397,6 +397,8 @@ def dicToMat(D):
 #     nAR :: The number of Access Routers 
 ##########################################################
 def printGraph(G):     
+    print type(G) 
+
     pngName = "top.png" 
     f = open('top.dot','w')
     f.writelines('digraph G {\nnode [width=.3,height=.3,shape=circle,style=filled,color="black",fillcolor=white,fontcolor=firebrick4] \nedge [penwidth=0.75] \noverlap="false";\rrankdir=LR;\n')
