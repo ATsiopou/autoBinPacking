@@ -2,7 +2,7 @@ import numpy as np
 import os 
 import dijkstra as dkstra  
 import random as rndm 
-
+#import fioUtils as io
 # ADDME 
 # DESCR : 
 #         Heuristic utility functions. 
@@ -16,7 +16,6 @@ import random as rndm
 #          ... 
 #         utl.getPath(G,start,end)  
 ##############################################################
-
 
 ##########################################################
 # DSCR   : 
@@ -52,7 +51,8 @@ def makeR(numReq):
     minInt = 1 
     # Create an empty array with the right dimensionality 
     R = np.empty((0,vecSize), int)    
-    # Iterate over the number of requests , adding each one to the top 
+    # Iterate over the number of requests , adding each
+    # one to the top 
     for r in xrange(numReq):
         row = rndm.sample(range(minInt, maxInt+1), vecSize)
         R   = np.row_stack((R, row))
@@ -108,7 +108,10 @@ def makeC(K,L):
 ##########################################################
 def makeU(K):
     # create U as an 2x1 array 
-    valU = np.array([[2000],[30]])    
+    valU = np.array([[10],[200000000000000]])    
+    #valU = np.array([[100000000],[300000000]])    
+    #valU = np.array([[2000],[30]])    
+    #valU = np.array([[float(0)],[float(0)]])    
     # Here we make u. 
     # first identify the rows of u 
     valu1 = [40 , 10 , 20 ,30, 50] 
@@ -236,6 +239,7 @@ def getRandomAR():
 #              f1 :: x_k_i of objective functions
 ##########################################################
 def init(R,K,L,U,f1):
+        
     r,c    = R.shape 
     xFinal = np.zeros((1,len( f1.flatten() ))) 
     xTable = np.zeros((K,L))
@@ -252,8 +256,8 @@ def init(R,K,L,U,f1):
     
     return fAllocationTable,allocationTable,xTable,pcCost,RU,xFinal,r,c
 ##########################################################
-# Func    : printSummary()
-# Decr    : Prints hosting either
+# Func     : printSummary()
+# Descr    : Prints hosting either
 #           1) successfull
 #           2) failed
 #           3) reason h/u
@@ -263,7 +267,7 @@ def init(R,K,L,U,f1):
 # alloctionTable  :: Set size of table. Holds node,func
 #                    request mapping
 ##########################################################
-def printSummary(R,K,L,D,allocationTable):
+def printSummary(R,K,L,D,blockProb,numBlockReq,blockReqList,allocationTable):
     row , col = R.shape 
     numNodes  = K 
     
@@ -274,26 +278,34 @@ def printSummary(R,K,L,D,allocationTable):
     #fprintf( [ repmat('%.2f   ',1,size(rho,2)) '\n'], rho')
     #fprintf('Request Matrix: \n\n')
     #fprintf( [ repmat('\t%d   ',1,size(R,2)) '\n'], R')
-    print " " 
-    print " "     
-    print "----------------------------------------------------------------"
-    print "|     Request     |    Order    |   Function  |   Mapped node   |"
-    print "----------------------------------------------------------------"
+    print "==============================================================================="
+    print "\t\t\t Iteration" 
+    print "==============================================================================="
+    print "Number of requests blocked : " , numBlockReq
+    print "Blocking probability       : " , blockProb 
+    print "Blocked List               : " , blockReqList 
+    print ""
+    print "-------------------------------------------------------------------------------"
+    print "|     Request     |    Order    |   Function  |   Mapped node   |   isMapped  |"
+    print "-------------------------------------------------------------------------------"
     for rIndex in range(0,row):
         reqi = R[rIndex,:]
         for f in range(0,col):
             rNode = getNodeFromFunc(reqi[f],rIndex+1,numNodes,allocationTable)
             rFunc = reqi[f]
+            hVal = isHosted(rNode,rFunc,rIndex)
             #val = fAllocationTable(rNode,rFunc,rIndex) 
-            print "\t",rIndex+1,"\t\t",f+1,"\t\t",rFunc,"\t\t",rNode
+            print "\t",rIndex+1,"\t\t",f+1,"\t\t",rFunc,"\t\t",rNode, "\t\t", hVal 
+            
+            
             
 ##########################################################
-# Func    : getNodeFromFunc() 
-# Decr    : Return the node for function f was mapped
-#           to. Plot function utility.
+# Func     : getNodeFromFunc() 
+# Descr    : Return the node for function f was mapped
+#            to. Plot function utility.
 ##########################################################
 def getNodeFromFunc(func,req,K,allocationTable): 
-    node  = 1
+    node  = 0
     counter = 1
     for kInd in range(0,K):
         if( allocationTable[kInd,func-1,req-1] == 1 ):
@@ -301,57 +313,34 @@ def getNodeFromFunc(func,req,K,allocationTable):
         counter = counter + 1
     return node
 ##########################################################
-# Func    : getDestinationNode()
-# Decr    : Given the destination set D, the prob.
-#           vector rho,clc. the corresponding
-#           destination node.
-# Return  :
-#   node :: Node corresponding to max rho index in set D    
+# Func     : getStaticDestinationNode()
+# Descr    : Given the destination o, return the starting 
+#           node. In this case it is simply o. 
+# Return   :
+#   node  :: Node corresponding to max rho index in set D    
 ##########################################################
 def getStaticDestinationNode(o):
     # find the max val
     node = o
     return node                     
 ########################################################
-# Func    : getPpccDestinationNode()
-# Decr    : Given the destination set D, the prob.
-#           vector rho,clc. the corresponding
-#           destination node.
-# Return  :
-#   node :: Node corresponding to max rho index in set D
+# Func     : getPpccDestinationNode()
+# Descr    : Given the destination set D, the prob.
+#            vector rho,clc. the corresponding
+#            destination node.
+# Return   :
+#   node  :: Node corresponding to max rho index in set D
 ########################################################
 def getPpccDestinationNode(D,rho):
-    # find the max val
-    maxx = np.max(rho)
-    for i in range(1-1, len(rho)):
-        if(maxx == rho[i]):
-            node = D[i]
-        #count = count + 1
-    return node
-
-########################################################
-# Func    : getPpccDestinationNode()
-# Decr    : Given the destination set D, the prob.
-#           vector rho,clc. the corresponding
-#           destination node.
-# Return  :
-#   node :: Node corresponding to max rho index in set D
-########################################################
-def getPpccDestinationNodeTest(D,rho):
-    #
     node = 1
-    
     maxVal = max(rho)
-    print "maxVal" , maxVal 
     for i in range(0,len(rho)): 
         if( maxVal == rho[i]): 
             node = D[i] 
     return node 
-
-
 ########################################################
-# Func    : getPath()
-# Decr    : Calculate the shortest path.
+# Func     : getPath()
+# Descr    : Calculate the shortest path.
 # Input:
 #    G    :: The undirected graph
 #    s    :: Source node
@@ -365,23 +354,25 @@ def getPath(G,source,dest):
     cost, sPath, iPath = dkstra.shortestPath(G,source,dest)
     return cost , iPath
 ########################################################
-# Func     : getStarting Node
-# Decr     : Calculate the starting node location with
+# Func      : getStarting Node
+# Descr     : Calculate the starting node location with
 #            with the minimum cost.
-# Locl vars:
+# Local vars
+#-----------
 #   sNode :: The starting node
 #   minVal:: The current minimum value
 #   cost  :: Cost of the path
 #   path  :: The path, in terms of its elem. nodes.
 ########################################################
 def getStartNode(G,Sr,d):
-    
+    # Take the length of the Sr vector and init pathCost vec
     pathCost = np.zeros(len(Sr))
-    
+    # Put each cost with start node == Sr elemnt into pathCost vec 
     for ii in range(int(Sr[0])-1, len(Sr)):
         cst,path = getPath(G,int(Sr[ii]),int(d))
         pathCost[ii] = cst
-
+    # This extracts the max value then the index corresponding to
+    # that max value 
     if ( all(pathCost == 0) ): 
         startingNode = 0
     else:
@@ -398,25 +389,25 @@ def getStartNode(G,Sr,d):
         startingNode = Sr[indx]  
     
     return startingNode
-
 ########################################################
-# Func     : getStarting Node
-# Def      : Function to return in value greater than 
+# Func     : minGt()
+# Descr    : Function to return min value greater than 
 #            some specified value : val 
 ########################################################
 def minGt(seq, val):
     return min(v for v in seq if v > val)
 ########################################################
-# Func     : getStarting Node
-# Def      : Function to return in value greater than 
+# Func     : maxGt()
+# Descr    : Function to return max value greater than 
 #            some specified value : val 
 ########################################################
 def maxGt(seq, val):
     return max(v for v in seq if v > val)
 ########################################################
-# Func    : getPath()
-# Decr    : wrapper function for getPath()
+# Func    : getCandidatePath()
+# Descr   : wrapper function for getPath()
 # Input   :
+#      G :: The graph 
 #      s :: source
 #      d :: destination
 ########################################################
@@ -425,7 +416,7 @@ def getCandidatePath(G,s,d):
     return sNodes
 ########################################################
 # Func    : isHosted()
-# Decr    : Evealuates if func is hosted at node for
+# Desc    : Evealuates if func is hosted at node for
 #           service reqest r.
 # Input   :
 #   func :: virtual network function
@@ -468,7 +459,7 @@ def host(node,func,request,b):
 def setxTable(node,func,b):
     xTable[node-1,func-1] = b
 ########################################################
-# Func    : mapTicker
+# Func    : hostFail
 # Decr    : Records the mapping, and failurs
 # Input   :
 # request:: service request.
@@ -496,7 +487,7 @@ def updateResources(U,u,node,func):
     return U
 ########################################################
 # Func    : canNodeProcess()
-# Decr    : Check to see if node has resources to process
+# Descr   : Check to see if node has resources to process
 #           the current vNF in r
 # Input   :
 #   func :: virtual network function
@@ -514,7 +505,7 @@ def canNodeProcess(U,u,node,func):
     return b
 ########################################################
 # Func    : getNode()
-# Decr    : Return the node given the function,
+# Descr   : Return the node given the function,
 #           and request
 # Return  : Node
 ########################################################
@@ -523,43 +514,46 @@ def getNode(K, func, req, allocationTable):
     counter = 1
     for kInd in range(1-1, K):
         if ( allocationTable[kInd, func-1, req-1] == 1):
-            node = counter
-            
+            node = counter            
         counter = counter + 1
     return node
 ########################################################
 # Func    : blockDetector()
-# Decr    : Return the blocked requests given allocation
+# Descr   : Return the blocked requests given allocation
 #           and request Matrix R.
 # Return  : blocked Request r
 ########################################################
 def blockDetector(allocationTable, R):
 
     rows, cols = R.shape
-    count = 0
     blockedRequest = np.zeros(rows)
     
     for rr in range(1-1, rows):
+        #print "Request : ", rr+1 
+        #print "Function : " 
         for ff in range(1-1,cols):
-            #print "R[",rr,",",ff,"]= ", R[rr,ff] 
+            #print ff+1
+            #print "allocTable: ", allocationTable[:,R[rr,ff]-1,rr] 
             if(np.all(allocationTable[:,R[rr,ff]-1,rr] == 0)):
-                blockedRequest[count]=rr+1
-                count = count + 1
+                #print "Entered IF "
+                blockedRequest[rr]=1
+                #print "blocked[",count,"]=",blockedRequest[count] 
                 break
-    return blockedRequest, count
+                
+    return blockedRequest, sum(blockedRequest)
 ########################################################
 # Func    : blockingPenalty()
-# Decr    : Return a penalty cost from gateway to the
+# Descr   : Return a penalty cost from gateway to the
 #           Internet.
 # Return  : Random internet-gateway cost.
 ########################################################
 def blockingPenalty():
-    minInt = 100
-    maxInt = 500
+    minInt = 10000
+    maxInt = 10002
     return float(np.random.randint(minInt, maxInt)) 
 ########################################################
 # Func    : checkList(L,val)
-# Decr    : Return 1 if val is in L, 0 otherwise.
+# Descr   : Return 1 if val is in L, 0 otherwise.
 # Return  : 1 or 0.
 ########################################################
 def checkList(L, val):
@@ -568,4 +562,5 @@ def checkList(L, val):
         return 1
     else:
         return 0
+
 # -- End of module 

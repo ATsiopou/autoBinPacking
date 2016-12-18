@@ -171,7 +171,7 @@ print "="*eqlSymLength, " [(START) : monteCarlo.py  ]", "="*eqlSymLength
 print
 print "\t\t[( Testing ) case 1 : PPCC / STATICPPCC / SPBL (NAIVE)  ]" 
 print "\t\t","="*eqlSymLength, "\tK\t", "="*eqlSymLength
-print mc.monteCarlo('K',10,Sr,L,V,f1,f2,f3,f4) 
+mc.monteCarlo('K',10,Sr,L,V,f1,f2,f3,f4) 
 print 
 
 

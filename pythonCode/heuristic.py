@@ -5,12 +5,12 @@ import hrUtils as utl
 #=                      PPCC                          =#
 #======================================================#
 def PPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4):
+    # Print
+    name="PPCC"
 
-#- Initialization 
+    #- Initialization 
     fAllocationTable,allocationTable,xTable,pcCost,RU,x,r,c = utl.init(R,K,L,U,f1)
-
-    #d = utl.getPpccDestinationNode(D,rho)
-    d = utl.getPpccDestinationNodeTest(D,rho)
+    d = utl.getPpccDestinationNode(D,rho)
     CR = np.zeros(L)    
     
     # *Alllocation vector * #
@@ -31,12 +31,13 @@ def PPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4):
                     
                     if ( utl.canNodeProcess(U, u, cNode, cFunc)):
                         #if (isHosted(cNode, cFunc, rr) == 0):
-                        allocationTable = utl.host(cNode, cFunc, rr+1, 1)
+                        #allocationTable = utl.host(cNode, cFunc, rr+1, 1)
+                        utl.host(cNode, cFunc, rr+1, 1) ### CHANGED 
                         utl.setxTable(cNode, cFunc, 1)
                         U = utl.updateResources(U, u, cNode, cFunc)
                         pcCost = pcCost + C[cNode-1, cFunc-1]
                     else:
-                        utl.hostFail(cNode, cFunc, rr, 404)
+                        utl.hostFail(cNode, cFunc, rr+1, 404)
                     #else:
                         #hostFail(cNode, cFunc, rr, 'u')
     
@@ -55,27 +56,22 @@ def PPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4):
                 Lr = len(R[rr,:])
                 I = R[rr,:]
                 for l in range (1-1,Lr-1):
-                    n1 = utl.getNode(K, I[l], rr, allocationTable)
-                    n2 = utl.getNode(K, I[l + 1], rr, allocationTable)
+                    n1 = utl.getNode(K, I[l], rr+1, allocationTable)
+                    n2 = utl.getNode(K, I[l + 1], rr+1, allocationTable)
                     CR = CR + P[n1-1, n2-1]
                     CRC = 0
-                    CRC = CRC + P[utl.getNode(K, Lr, rr, allocationTable), D[dd]-1]
+                    CRC = CRC + P[utl.getNode(K, Lr, rr+1, allocationTable)-1, D[dd]-1] ### SHOULD BE P[-- - 1, blah ]
                     pcCost = pcCost + rho[dd] * CRC
 
     cost = pcCost
-
-# * Blocking Probability * #
+                    
+    # * Blocking Probability * #
     blockingProbability = float(0)
-    blockedRequestlist, numberOfblockedRequest = utl.blockDetector(allocationTable, R)
-    print "blockedRequestlist: ", blockedRequestlist
-    print "Number of blocked requests: ", numberOfblockedRequest
-    
+    blockedRequestlist, numberOfblockedRequest = utl.blockDetector(allocationTable, R)    
     rows,cols = R.shape
-    blockingProbability = float(numberOfblockedRequest)/float(rows)
+    blockingProbability = float(float(numberOfblockedRequest)/float(rows))
 
-    
-    utl.printSummary(R,K,L,D,allocationTable)    
-    #print "allocation table after" , allocationTable
+    #0utl.printSummary(R,K,L,D,blockingProbability,numberOfblockedRequest,blockedRequestlist ,allocationTable)   
     
     return cost, blockingProbability
 
@@ -84,9 +80,11 @@ def PPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4):
 # =                      BPCC                          =#
 # ======================================================#
 def BPCC(G, K, L, R, P, V, C, D, U, u, Sr, nAR, rho, o, f1, f2, f3, f4):
+    # Define the name 
+    name="BPCC"
+
     # - Initialization
     fAllocationTable, allocationTable, xTable, pcCost, RU, x, r, c = utl.init(R, K, L, U, f1)
-
     d = utl.getPpccDestinationNode(D, rho)
     CR = np.zeros(L)
 
@@ -106,50 +104,47 @@ def BPCC(G, K, L, R, P, V, C, D, U, u, Sr, nAR, rho, o, f1, f2, f3, f4):
                     cNode = CPL[kk]
                     if (utl.canNodeProcess(U, u, cNode, cFunc)):
                         # if (isHosted(cNode, cFunc, rr) == 0):
-                        utl.host(cNode, cFunc, rr, 1)
+                        #allocationTable = utl.host(cNode, cFunc, rr, 1)
+                        utl.host(cNode, cFunc, rr+1, 1)
                         utl.setxTable(cNode, cFunc, 1)
                         U = utl.updateResources(U, u, cNode, cFunc)
                         pcCost = pcCost + C[cNode-1, cFunc-1]
                     else:
-                        utl.hostFail(cNode, cFunc, rr, 404)
+                        utl.hostFail(cNode, cFunc, rr+1, 404)
                         # else:
                         # hostFail(cNode, cFunc, rr, 'u')
 
     # * Routing cost * #
     for dd in range(1 - 1, len(D)):
-
         s = utl.getStartNode(G, Sr, dd)
         # Define the GateWay
         GW=1
         for rr in range(1 - 1, r):
             # length of the network elemeents
             if(utl.checkList(utl.blockDetector(allocationTable, R), rr+1)):
-
                 CRC = 0
                 CRC = P[GW - 1 , D[dd] - 1] + utl.blockingPenalty()
                 pcCost = pcCost + rho[dd]*CRC
-                
             else:
                 Lr = len(R[rr, :])
                 I = R[rr, :]
                 for l in range(1 - 1, Lr-1):
-                    n1 = utl.getNode(K, I[l], rr, allocationTable)
-                    n2 = utl.getNode(K, I[l + 1], rr, allocationTable)
-                    CR = CR + P[n1, n2]
+                    n1 = utl.getNode(K, I[l], rr+1, allocationTable)
+                    n2 = utl.getNode(K, I[l + 1], rr+1, allocationTable)
+                    CR = CR + P[n1-1, n2-1]
                     CRC = 0
-                    CRC = CRC + P[utl.getNode(K, Lr, rr, allocationTable), D[dd] - 1]
+                    CRC = CRC + P[utl.getNode(K, Lr, rr+1, allocationTable)-1, D[dd] - 1]
                     pcCost = pcCost + rho[dd] * CRC
-
     cost = pcCost
 
     # * Blocking Probability * #
     blockingProbability = float(0)
     blockedRequestlist, numberOfblockedRequest = utl.blockDetector(allocationTable, R)
     rows, cols = R.shape
-    blockingProbability = float(numberOfblockedRequest) / float(rows)
+    blockingProbability = float(float(numberOfblockedRequest) / float(rows)) 
+    
+    #utl.printSummary(R,K,L,D,blockingProbability,numberOfblockedRequest,blockedRequestlist ,allocationTable)    
 
-        # print('Cost ppcc : #2.2f\n\n', pcCost)
-        # printSummary(R,K,L,D,allocationTable,fAllocationTable)
     return cost, blockingProbability
 
 
@@ -158,12 +153,11 @@ def BPCC(G, K, L, R, P, V, C, D, U, u, Sr, nAR, rho, o, f1, f2, f3, f4):
 #======================================================#
 def SPBA(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4):
 
-#- Initialization
+    name="SPBA"
+    #- Initialization
     fAllocationTable,allocationTable,xTable,pcCost,RU,x,r,c = utl.init(R,K,L,U,f1)
-
     d = utl.getStaticDestinationNode(o)
     CR = np.zeros(L)
-   # CR = np.zeros((1,len(L)))
    
     # *Alllocation vector * #
     for rr in range (1-1, r):
@@ -171,7 +165,7 @@ def SPBA(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4):
         sNodes = utl.getCandidatePath(G, s, d)
 
         if (sNodes != 0):
-            sNodes = sNodes[0:len(sNodes) - 1]#  # ok<*NASGU>
+            sNodes = sNodes[0:len(sNodes) - 1]
             CPL = np.sort(sNodes)
             FPL = R[rr,:]
 
@@ -180,13 +174,13 @@ def SPBA(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4):
                 for ff in range (1-1 ,len(FPL)):
                     cFunc = FPL[ff]
                     if (utl.canNodeProcess(U, u, cNode, cFunc)):
-                    #if (isHosted(cNode, cFunc, rr) == 0):
-                        utl.host(cNode, cFunc, rr, 1)
+                        #allocationTable = utl.host(cNode, cFunc, rr, 1)
+                        utl.host(cNode, cFunc, rr+1, 1)
                         utl.setxTable(cNode, cFunc, 1)
                         U = utl.updateResources(U, u, cNode, cFunc)
                         pcCost = pcCost + C[cNode-1, cFunc-1]
                     else:
-                        utl.hostFail(cNode, cFunc, rr, 404)
+                        utl.hostFail(cNode, cFunc, rr+1, 404)
                     #else:
                     #hostFail(cNode, cFunc, rr, 'u')
 
@@ -201,65 +195,57 @@ def SPBA(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4):
             if ( utl.checkList(utl.blockDetector(allocationTable, R), rr+1) ):
                 CRC = 0
                 CRC = P[GW-1, D[dd]-1]+utl.blockingPenalty()
-
                 pcCost = pcCost + rho[dd]*CRC
             else:
                 Lr = len(R[rr,:])
                 I = R[rr,:]
                 for l in range (1-1,Lr-1):
-                    n1 = utl.getNode(K, I[l], rr, allocationTable)
-                    n2 = utl.getNode(K, I[l + 1], rr, allocationTable)
-                    CR = CR + P[n1, n2]
+                    n1 = utl.getNode(K, I[l], rr+1, allocationTable)
+                    n2 = utl.getNode(K, I[l + 1], rr+1, allocationTable)
+                    CR = CR + P[n1-1, n2-1]
                     CRC = 0
-                    CRC = CRC + P[utl.getNode(K, Lr, rr, allocationTable), D[dd] - 1]
-
+                    CRC = CRC + P[utl.getNode(K, Lr, rr+1, allocationTable)-1, D[dd] - 1]
                     pcCost = pcCost + rho[dd] * CRC
-
     cost = pcCost
 
     # * Blocking Probability * #
     blockingProbability = float(0)
-    blockedRequestlist, numberOfblockedRequest = utl.blockDetector (allocationTable, R)
+    blockedRequestlist, numberOfblockedRequest = utl.blockDetector(allocationTable, R)
     rows,cols = R.shape
-    blockingProbability = float(numberOfblockedRequest)/float(rows)
+    blockingProbability = float(float(numberOfblockedRequest)/float(rows))
 
+    # Testing printout - to confirm blocking probability works correctly 
+    #utl.printSummary(R,K,L,D,blockingProbability,numberOfblockedRequest,blockedRequestlist ,allocationTable)    
 
-
-
-        #print('Cost ppcc : #2.2f\n\n', pcCost)
-        #printSummary(R,K,L,D,allocationTable,fAllocationTable)
     return cost , blockingProbability
-
 #======================================================#
 #=            AGW   :   All from GateWay              =#
 #======================================================#
 def AGW(P,D,R,rho):
+    name="AGW"
+    
     # Define the GateWay
     GW = 1
-
     sumCost = 0
     rrr, c = R.shape
 
     for rr in range (1-1, rrr):
         for dd in range (1-1, len(D)):
-
             sumCost = sumCost + rho[dd] * P[GW-1, D[dd]-1]
-
     cost = sumCost
-
     return cost
 #======================================================#
 #=      CAGW   : Capacitated All from GateWay         =#
 #======================================================#
 def CAGW(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4):
+
+    name="CAGW"
+    
     # Define the GateWay
     GW = 1
     # - Initialization
     fAllocationTable, allocationTable, xTable, pcCost, RU, x, r, c = utl.init(R, K, L, U, f1)
 
-    # Get the first destination
-    # d1 = getDestinaion(D, rho)
-    # pathCost1 = P(GW, d1);
     for rr in range (1-1, r):
         FPL = R[rr,:]
         cNode = GW 
@@ -267,12 +253,13 @@ def CAGW(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4):
             cFunc = FPL[ff] - 1
             if (utl.canNodeProcess(U, u, cNode, cFunc)):
                 #if (isHosted(cNode, cFunc, rr) == 0):
-                utl.host(cNode, cFunc, rr, 1)
+                #allocationTable = utl.host(cNode, cFunc, rr, 1)
+                utl.host(cNode, cFunc, rr+1, 1)
                 utl.setxTable(cNode, cFunc, 1)
                 U = utl.updateResources(U, u, cNode, cFunc)
                 pcCost = pcCost + C[cNode-1, cFunc-1]
             else:
-                utl.hostFail(cNode, cFunc, rr, 404)
+                utl.hostFail(cNode, cFunc, rr+1, 404)
 
     # * Routing cost * #
     rrr, c = R.shape
@@ -294,20 +281,11 @@ def CAGW(G,K,L,R,P,V,C,D,U,u,Sr,nAR,rho,o,f1,f2,f3,f4):
     blockingProbability = float(0)
     blockedRequestlist, numberOfblockedRequest = utl.blockDetector(allocationTable, R)
     rows, cols = R.shape
-    blockingProbability = float(numberOfblockedRequest) / float(rows)
-
-    return cost, blockingProbability
-
-#
-# Check list
-#
-def checkList( L , val):
-    LL = L[0]
+    blockingProbability = float( float(numberOfblockedRequest) / float(rows) ) 
     
-    if ( val in LL ):
-        return 1
-    else:
-        return 0
+    #utl.printSummary(R,K,L,D,blockingProbability,numberOfblockedRequest,blockedRequestlist ,allocationTable)    
+    
+    return cost, blockingProbability
 
 
 

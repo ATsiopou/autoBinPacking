@@ -2,6 +2,7 @@ import hrUtils as utl
 import heuristic as hrstc 
 import dijkstra as dk
 import numpy as np
+#import fioUtils as fio 
 ##########################################################
 # DSCR
 #         Init function for monte carlo script 
@@ -11,31 +12,20 @@ import numpy as np
 #      :: 
 ##########################################################
 def monteCarlo(simType,RUN,Sr,L,V,f1,f2,f3,f4):
-    
     if ( simType == 'K' ):
     # This simulates monte carlo for nodes K
-        mPPCC,mSPBA,mBPCC,mAGW,mCAGW = monteCarloK(RUN,Sr,L,V,f1,f2,f3,f4,simType)
-        printAverageGains(mPPCC,mSPBA,mAGW,simType) 
-
+        mPPCC,mSPBA,mBPCC,mAGW,mCAGW,mPPCC,mbSPBA,mbBPCC,mbCAGW = monteCarloK(RUN,Sr,L,V,f1,f2,f3,f4,simType)
+        #printAverageGains(mPPCC,mSPBA,mAGW,simType) 
     elif ( simType == 'R' ):
     # Simulate monte carlo for Requeasts
-        print "-"*20
-        print "Monte Carlo simulation [R]" 
-        print "-"*20
         mPPCC,mSPBA,mBPCC,mAGW,mCAGW = monteCarloR(RUN,Sr,L,V,f1,f2,f3,f4,simType)        
-        printAverageGains(mPPCC,mSPBA,mAGW,simType) 
-
+        #printAverageGains(mPPCC,mSPBA,mAGW,simType) 
     elif( simType == 'Rho' ):
     # Simulate Rho change in monte Carlo
-        print "-"*20
-        print"Monte Carlo simulation [Rho]"
-        print "-"*20
         mPPCC,mSPBA,mBPCC,mAGW,mCAGW = monteCarloRho(RUN,Sr,L,V,f1,f2,f3,f4,simType)
-        printAverageGains(mPPCC,mSPBA,mAGW,simType) 
-    
+        #printAverageGains(mPPCC,mSPBA,mAGW,simType)     
     else:
         return 0
-
 ###########################################################    
 # Func     : monteCarloK
 # Decr     : Monte carlo simulation with a varying 
@@ -50,26 +40,29 @@ def monteCarlo(simType,RUN,Sr,L,V,f1,f2,f3,f4):
 #  mNaive :: monte c naive avrg sol vector for each k
 ###########################################################    
 def monteCarloK(RUN,Sr,L,V,f1,f2,f3,f4,simType): 
-
-    print "RUN IN MONTECARLOK: " , RUN 
-
     # Init the vectors of size 1xRUN 
     costPPCC = np.zeros((RUN), dtype=np.int)
     costSPBA = np.zeros((RUN), dtype=np.int) 
     costBPCC = np.zeros((RUN), dtype=np.int) 
     costAGW  = np.zeros((RUN), dtype=np.int)
     costCAGW = np.zeros((RUN), dtype=np.int)
-    blockPPCC = np.zeros((RUN), dtype=np.int) 
-    blockSPBA = np.zeros((RUN), dtype=np.int)
-    blockBPCC = np.zeros((RUN), dtype=np.int) 
-    blockCAGW = np.zeros((RUN), dtype=np.int)
-
+    # Init the blocking prob vectors 
+    blockPPCC = np.zeros((RUN), dtype=np.float) 
+    blockSPBA = np.zeros((RUN), dtype=np.float)
+    blockBPCC = np.zeros((RUN), dtype=np.float) 
+    blockCAGW = np.zeros((RUN), dtype=np.float)
     # Init the mean vectors 
-    mPPCC = np.zeros((RUN), dtype=np.int) 
-    mSPBA = np.zeros((RUN), dtype=np.int)
-    mBPCC = np.zeros((RUN), dtype=np.int)
-    mAGW  = np.zeros((RUN), dtype=np.int)
-    mCAGW = np.zeros((RUN), dtype=np.int)
+    mPPCC = np.zeros((RUN), dtype=np.float) 
+    mSPBA = np.zeros((RUN), dtype=np.float)
+    mBPCC = np.zeros((RUN), dtype=np.float)
+    mAGW  = np.zeros((RUN), dtype=np.float)
+    mCAGW = np.zeros((RUN), dtype=np.float)
+    # Init the mean vectors 
+    mbPPCC = np.zeros((RUN), dtype=np.float) 
+    mbSPBA = np.zeros((RUN), dtype=np.float)
+    mbBPCC = np.zeros((RUN), dtype=np.float)
+    mbAGW  = np.zeros((RUN), dtype=np.float)
+    mbCAGW = np.zeros((RUN), dtype=np.float)
 
     # Init the monte carlo vars 
     NUMBER_REQUESTS = 5
@@ -80,7 +73,6 @@ def monteCarloK(RUN,Sr,L,V,f1,f2,f3,f4,simType):
     # Start the main iteration loop 
     for kk in range(K_START,K_END):
         K = kk
-        
         #while( AuxVec <= RUN ):
         for i in range(0,RUN):
             # Generate the inputs for the iteration 
@@ -111,33 +103,39 @@ def monteCarloK(RUN,Sr,L,V,f1,f2,f3,f4,simType):
                 costBPCC[i] = cost3 
                 costCAGW[i] = cost4
                 costAGW[i]  = cost5
-           
                 blockPPCC[i] = block1 
                 blockSPBA[i] = block2
                 blockBPCC[i] = block3 
                 blockCAGW[i] = block4
 
         print "costPPCC : " , costPPCC
-        print "costSPBA : " , costSPBA
         print "costBPCC : " , costBPCC
+        print "costSPBA : " , costSPBA
         print "costCAGW : ", costCAGW 
         print "costAGW  : ", costAGW 
         
         print "blockPPCC :" , blockPPCC
-        print "blockSPBA :" , blockSPBA
         print "blockBPCC :" , blockBPCC
+        print "blockSPBA :" , blockSPBA
         print "blockCAGW :" , blockCAGW
         
-        mPPCC[counter]= np.mean(costPPCC)
-        mSPBA[counter]= np.mean(costSPBA)
-        mBPCC[counter]= np.mean(costBPCC)
+        mPPCC[counter] = np.mean(costPPCC)
+        mbPPCC[counter]= np.mean(blockPPCC)
+        mBPCC[counter] = np.mean(costPPCC)
+        mbBPCC[counter]= np.mean(blockPPCC)
+        mSPBA[counter] = np.mean(costSPBA)
+        mbSPBA[counter]= np.mean(blockSPBA)
+        mBPCC[counter] = np.mean(costBPCC)
+        mbBPCC[counter]= np.mean(blockBPCC)
         mCAGW[counter] = np.mean(costCAGW)
-        mAGW[counter] = np.mean(costAGW)
-        
-        #printRound(kk,NUMBER_REQUESTS,rho,mPPCC(counter),mNaive(counter),msPPCC(counter),mcSimulation)
+        mbCAGW[counter]= np.mean(blockCAGW)
+        mAGW[counter]  = np.mean(costAGW)
+        #mbAGW[counter] = np.mean(blockAGW)
+
+        printRound(kk,NUMBER_REQUESTS,rho,mPPCC[counter],mBPCC[counter],mSPBA[counter],mAGW[counter],mCAGW[counter],mbPPCC[counter],mbBPCC[counter],mbSPBA[counter],mbCAGW[counter],simType)
         counter = counter +1      
     # end for 
-    return mPPCC,mSPBA,mBPCC,mAGW,mCAGW
+    return mPPCC,mSPBA,mBPCC,mAGW,mCAGW,mbPPCC,mbSPBA,mbBPCC,mbCAGW
 
 
 
@@ -163,12 +161,23 @@ def monteCarloR(RUN,Sr,L,V,f1,f2,f3,f4,simType):
     costAGW  = np.zeros((RUN), dtype=np.int)
     costCAGW = np.zeros((RUN), dtype=np.int)
 
+    # Init the block vectors 
+    blockPPCC = np.zeros((RUN), dtype=np.float) 
+    blockSPBA = np.zeros((RUN), dtype=np.float)
+    blockBPCC = np.zeros((RUN), dtype=np.float) 
+    blockCAGW = np.zeros((RUN), dtype=np.float)
     # Init the mean vectors 
-    mPPCC = np.zeros((RUN), dtype=np.int) 
-    mSPBA = np.zeros((RUN), dtype=np.int)
-    mBPCC = np.zeros((RUN), dtype=np.int)
-    mAGW  = np.zeros((RUN), dtype=np.int)
-    mCAGW = np.zeros((RUN), dtype=np.int)
+    mPPCC = np.zeros((RUN), dtype=np.float) 
+    mSPBA = np.zeros((RUN), dtype=np.float)
+    mBPCC = np.zeros((RUN), dtype=np.float)
+    mAGW  = np.zeros((RUN), dtype=np.float)
+    mCAGW = np.zeros((RUN), dtype=np.float)
+    # Init the mean vectors blocking 
+    mbPPCC = np.zeros((RUN), dtype=np.float) 
+    mbSPBA = np.zeros((RUN), dtype=np.float)
+    mbBPCC = np.zeros((RUN), dtype=np.float)
+    mbAGW  = np.zeros((RUN), dtype=np.float)
+    mbCAGW = np.zeros((RUN), dtype=np.float)
 
     # Define/init local vars 
     K     = 20
@@ -207,8 +216,14 @@ def monteCarloR(RUN,Sr,L,V,f1,f2,f3,f4,simType):
         mBPCC[counter]= np.mean(costBPCC)
         mCAGW[counter] = np.mean(costCAGW)
         mAGW[counter] = np.mean(costAGW)
+
+        mPPCC[counter]= np.mean(costPPCC)
+        mSPBA[counter]= np.mean(costSPBA)
+        mBPCC[counter]= np.mean(costBPCC)
+        mCAGW[counter] = np.mean(costCAGW)
+        mAGW[counter] = np.mean(costAGW)
     
-        #printRound(K,rr,rho,mPPCC(counter),mNaive(counter),msPPCC(counter),mcSimulation);
+        printRound(K,rr,rho,mPPCC[counter],mNaive[counter],msPPCC[counter],simType);
         counter = counter +1;          
     return mPPCC,mSPBA,mBPCC,mAGW,mCAGW
 
@@ -233,12 +248,17 @@ def monteCarloRho(RUN,Sr,L,V,f1,f2,f3,f4,simType):
     costAGW  = np.zeros((RUN), dtype=np.int)
     costCAGW = np.zeros((RUN), dtype=np.int)
 
+    blockPPCC = np.zeros((RUN), dtype=np.float) 
+    blockSPBA = np.zeros((RUN), dtype=np.float)
+    blockBPCC = np.zeros((RUN), dtype=np.float) 
+    blockCAGW = np.zeros((RUN), dtype=np.float)
+
     # Init the mean vectors 
-    mPPCC = np.zeros((RUN), dtype=np.int) 
-    mSPBA = np.zeros((RUN), dtype=np.int)
-    mBPCC = np.zeros((RUN), dtype=np.int)
-    mAGW  = np.zeros((RUN), dtype=np.int)
-    mCAGW = np.zeros((RUN), dtype=np.int)
+    mPPCC = np.zeros((RUN), dtype=np.float) 
+    mSPBA = np.zeros((RUN), dtype=np.float)
+    mBPCC = np.zeros((RUN), dtype=np.float)
+    mAGW  = np.zeros((RUN), dtype=np.float)
+    mCAGW = np.zeros((RUN), dtype=np.float)
 
     # Define/init local vars 
     K     = 20
@@ -340,15 +360,21 @@ def calculateAverage(d):
 #     mN   :: Naive mean solution vector of curr. round
 # Return   : NONE
 ###########################################################    
-def printRound(numNodes,numRequest,rhoVal,mP,mN,mS,mcSimulation):
+def printRound(numNodes,numRequest,rhoVal,mPPCC,mBPCC,mSPBA,mAGW,mCAGW,mbPPCC,mbBPCC,mbSPBA,mbCAGW,simType):
+
     print "-"*15
-    print "-\t\t[" ,mcSimulation ,"]\t\t-" 
+    print "-\t[" ,simType ,"]\t-" 
     print "-"*15 
     print "Request Size\t:"  , numRequest 
     print "Topology Size\t:" , numNodes 
     print "Rho\t\t:"         , rhoVal  
-    print "Mean AGW\t:"      , mN  
-    print "Mean SPBA\t:"     , mS  
-    print "Mean PPCC\t:"     , mP
-
+    print "Mean PPCC\t:"     , mPPCC
+    print "Mean BPCC\t:"     , mBPCC
+    print "Mean SPBA\t:"     , mSPBA
+    print "Mean  AGW\t:"     , mAGW
+    print "Mean CAGW\t:"     , mCAGW
+    print "Mean bPPCC\t:"    , mbPPCC
+    print "Mean bBPCC\t:"    , mbBPCC
+    print "Mean bSPBA\t:"    , mbSPBA
+    print "Mean bCAGW\t:"    , mbCAGW
 
