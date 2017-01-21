@@ -53,10 +53,10 @@ print
 print "="*eqlSymLength,  " [(START) : objUtils.py  ]", "="*eqlSymLength
 # Here we are testing functions inside objUtils.py module 
 r0 = 0
-obj,f1,f2,f3,f4 = ob.makeOBJ(K,L,R,utl.makeP(G),utl.makeV(R,L), utl.makeC(K,L),D,Sr,utl.makeRho(D,r0) ) 
-print 
+obj,f1,f2,f3,f4 = ob.makeOBJ(K,L,R,utl.makeP(G),utl.makeV(R,L), utl.makeC(K,L),D,Sr,utl.makeRho(D,r0) )
+print
 print "="*eqlSymLength, " [(END) : objUtils..py  ]", "="*eqlSymLength
-print 
+#print
 
 # -- end Testing: objUtils.PY module 
 # -- 
@@ -67,8 +67,8 @@ print "="*eqlSymLength, " [(START) : dijkstra.py  ]", "="*eqlSymLength
 print
 print "[( Testing ) imported files ]" 
 print "" 
-print "[( Testing ) shortestPath(G,1,2) ]" 
-print dkstra.shortestPath(G,'4','1')
+print "[( Testing ) shortestPath(G,4,1) ]"
+#print dkstra.shortestPath(G,'4','1')
 print dkstra.shortestPath(G,4,1)
 # shortest path 
 print 
@@ -92,7 +92,7 @@ print graph
 # Shortest path
 print 
 print "[( Testing ) shortestPathMatrix( genGraph(4,3)) ]" 
-#P = dkstra.shortestPathMatrix(graph) 
+#P = dkstra.shortestPathMatrix(graph)
 print P 
 print 
 print "="*eqlSymLength , " [(END) : dijkstra.py  ]", "="*eqlSymLength
@@ -123,8 +123,10 @@ print utl.getPath(G,1,3)
 # R 
 print
 print "[( Testing ) makeR(numRequest) ]" 
-print "nmber of req:" , 5 
-print utl.makeR(5) 
+print "number of req:" , 5
+print "number of VNF:" , 5
+print "length of req:" , 3
+print utl.makeR(5,5,3)
 # C 
 print
 print "[( Testing )  C ]"
@@ -152,7 +154,7 @@ print "D" , nD
 print 
 print "[( Testing ) makeRho(D,1) -- r0 for now is set to 1 ]" 
 r0 = 0
-ro = utl.makeRho(D,r0) 
+ro = utl.makeRho(D,r0)
 print "ro:  ", ro
 print 
 print 
@@ -171,31 +173,32 @@ print "="*eqlSymLength, " [(START) : monteCarlo.py  ]", "="*eqlSymLength
 print
 print "\t\t[( Testing ) case 1 : PPCC / STATICPPCC / SPBL (NAIVE)  ]" 
 print "\t\t","="*eqlSymLength, "\tK\t", "="*eqlSymLength
-mc.monteCarlo('K',10,Sr,L,V,f1,f2,f3,f4) 
-print 
+
+mc.monteCarlo('K',10,Sr,L,V,f1,f2,f3,f4)
+#print
 
 
-# -  STTIIC TEST  - #
-#print 
-#print "\t\t[( Testing ) CASE : TESTING STATIC GRAPH)   ]" 
+# -  Static Test  - #
+#print
+#print "\t\t[( Testing ) CASE : TESTING STATIC GRAPH)   ]"
 #print "\t\t","="*eqlSymLength, "\tR\t", "="*eqlSymLength
-#print 
-#print "G: \n\n" , G 
-#print "K: \n\n" , K 
+#print
+#print "G: \n\n" , G
+#print "K: \n\n" , K
 #print "L: \n\n" , L
 #print "R: \n\n" , R
-#print "P: \n\n" , P 
-#print "V: \n\n" , V 
+#print "P: \n\n" , P
+#print "V: \n\n" , V
 #print "C: \n\n" , C
-#print "D: \n\n" , D 
-#print "U: \n\n" , U 
+#print "D: \n\n" , D
+#print "U: \n\n" , U
 #print "u: \n\n" , u
-#print "Sr: \n\n" , Sr 
+#print "Sr: \n\n" , Sr
 #print "nAR: \n\n" , nAR
 #print "rho: \n\n" , ro
-#print "o: \n\n" , o  
-#print dkstra.printGraph(G) 
-#print hr.PPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,ro,o,f1,f2,f3,f4)  
+#print "o: \n\n" , o
+
+#print "cost pPCC, blocking pPcc",hr.PPCC(G,K,L,R,P,V,C,D,U,u,Sr,nAR,ro,o,f1,f2,f3,f4)
 
 
 
